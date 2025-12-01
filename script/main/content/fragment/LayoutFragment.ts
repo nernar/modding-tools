@@ -7,6 +7,9 @@ abstract class LayoutFragment extends BaseFragment {
 	override getContainer() {
 		return super.getContainer() as android.view.ViewGroup;
 	}
+	override getContainerRoot() {
+		return super.getContainerRoot() as android.view.ViewGroup;
+	}
 	getContainerLayout() {
 		return this.getContainer() as android.view.ViewGroup;
 	}

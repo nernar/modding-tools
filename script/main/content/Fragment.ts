@@ -1,4 +1,6 @@
 class Fragment {
+	readonly TYPE: string;
+
 	constructor() {
 		this.views = {};
 	}
