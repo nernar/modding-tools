@@ -1,8 +1,3 @@
-class Aboba {
-	do() {
-	}
-}
-
 abstract class BaseFragment extends Fragment {
 	readonly TYPE: string = "BaseFragment";
 	constructor() {
@@ -214,7 +209,9 @@ abstract class BaseFragment extends Fragment {
 }
 
 namespace BaseFragment {
-	export function parseJson(instanceOrJson: BaseFragment | IBaseFragment, json?: IBaseFragment): BaseFragment {
+	export function parseJson(json: IBaseFragment): BaseFragment
+	export function parseJson(instance: BaseFragment, json: IBaseFragment): BaseFragment;
+	export function parseJson(instanceOrJson: BaseFragment | IBaseFragment, json?: IBaseFragment) {
 		if (!(instanceOrJson instanceof BaseFragment)) {
 			MCSystem.throwException("BaseFragment.parseJson is callable only with non-abstract instances!");
 		}

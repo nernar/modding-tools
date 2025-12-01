@@ -203,14 +203,20 @@ class Fragment {
 	hover() {
 		return this.isHoverable();
 	}
+}
 
-	static parseJson: (instanceOrJson: any, json: any, preferredFragment: any) => any;
+namespace Fragment {
+	export function parseJson(json: IBaseFragment): Fragment;
+	export function parseJson(instance: Fragment, json: IBaseFragment, preferredFragment?: string): Fragment;
+	export function parseJson(instanceOrJson: Fragment | IBaseFragment, json?: IBaseFragment, preferredFragment?: string): Fragment {
+		MCSystem.throwException("Modding Tools: Internal exception in Fragment.parseJson!");
+	}
 }
 
 const registerFragmentJson = (function() {
 	let fragments = {};
 
-	Fragment.parseJson = function(instanceOrJson, json, preferredFragment) {
+	Fragment.parseJson = function(instanceOrJson: Fragment | IBaseFragment, json?: IBaseFragment, preferredFragment?: string) {
 		if (!(instanceOrJson instanceof Fragment)) {
 			json = instanceOrJson;
 			instanceOrJson = null;
@@ -225,7 +231,7 @@ const registerFragmentJson = (function() {
 		return fragments[preferredFragment].parseJson.call(this, instanceOrJson || new fragments[preferredFragment](), json);
 	};
 
-	return function(id, fragment) {
+	return function(id: string, fragment: any) {
 		if (fragments.hasOwnProperty(id)) {
 			Logger.Log("Modding Tools: Fragment json " + JSON.stringify(id) + " is already occupied!", "WARNING");
 			return false;

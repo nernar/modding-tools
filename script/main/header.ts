@@ -25,12 +25,8 @@ const DESCRIPTION = __mod__.getInfoProperty("description");
 const API_VERSION = parseFloat(REVISION.split("-")[2]);
 const PLATFORM = this.hasOwnProperty("android") ? "android" : "cli";
 
-const isAndroid = function() {
-	return PLATFORM == "android";
-};
-const isCLI = function() {
-	return PLATFORM == "cli";
-};
+const isAndroid = () => PLATFORM == "android";
+const isCLI = () => PLATFORM == "cli";
 
 const SHELL = (function() {
 	if (isCLI()) {
@@ -126,7 +122,8 @@ let toRawComplexUnitDip = toComplexUnitDip;
  * getY -> dip = 0,66525
  * getX -> dip = 0,83333
  */
-toComplexUnitDip = function(value) {
+// @ts-expect-error
+toComplexUnitDip = function(value: number) {
 	return toRawComplexUnitDip(value) * uiScaler;
 };
 
@@ -141,7 +138,8 @@ let toRawComplexUnitSp = toComplexUnitSp;
 /**
  * getFontSize -> sp = 0,38095
  */
-toComplexUnitSp = function(value) {
+// @ts-expect-error
+toComplexUnitSp = function(value: number) {
 	return toRawComplexUnitSp(value) * fontScale;
 };
 

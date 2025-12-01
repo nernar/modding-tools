@@ -1,4 +1,4 @@
-cheader.ts
+header.ts
 translation.ts
 
 polyfill/Object.js
@@ -29,9 +29,9 @@ content/shell/ShellProcessor.js
 content/shell/ToCLI.js
 
 content/WindowProxy.js
-content/FocusableWindow.js
-content/TransitionWindow.js
-content/UniqueWindow.js
+content/FocusableWindow.ts
+content/TransitionWindow.ts
+content/UniqueWindow.ts
 content/window/WindowProvider.js
 content/window/UniqueHelper.js
 content/window/Popups.js
@@ -80,9 +80,9 @@ project/ScriptImporter.ts
 debug/LogViewer.js
 debug/RuntimeCodeEvaluate.js
 
-sequence/AsyncSequence.js
-sequence/SnackSequence.js
-sequence/ControlSequence.js
+sequence/AsyncSequence.ts
+sequence/SnackSequence.ts
+sequence/ControlSequence.ts
 
 tools/project.js
 tools/console.js
@@ -93,7 +93,7 @@ algorithm/interaction.ts
 algorithm/keyboard.ts
 algorithm/launcher.ts
 
-integration/launcher.js
+integration/launcher.ts
 integration/shared.js
 
 job/.

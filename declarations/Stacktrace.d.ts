@@ -1,8 +1,4 @@
 declare function isValidFile(file: any): boolean;
-declare let launchTime: number;
-declare let isHorizon: boolean;
-declare let InnerCorePackages: any;
-declare let showToast: typeof print;
 declare function getLoadedModList(): any;
 declare function fetchScriptSources(mod: any): {};
 declare function setupLoadedSources(mods: any): void;

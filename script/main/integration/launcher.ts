@@ -1,4 +1,4 @@
-const launchIfSupported = function(who, api, prototype, cancel) {
+const launchIfSupported = (who: Mod.ModJsAdapter, api: number, prototype?: Scriptable, cancel?: () => void) => {
 	if (API_VERSION >= api) {
 		if (Math.ceil(API_VERSION) > Math.ceil(api)) {
 			Logger.Log("Modding Tools: Api " + api + " downgraded, please check '" + who.getName() + "' for updates", "WARNING");

@@ -6,7 +6,7 @@ interface IFocusableWindow<ABC = IFocusableWindow<any>> {
 	height?: CallableJsonProperty1<ABC, number>;
 	x?: CallableJsonProperty1<ABC, number>;
 	y?: CallableJsonProperty1<ABC, number>;
-	content?: CallableJsonProperty1<ABC, Nullable<android.view.View>>;
+	content?: CallableJsonProperty1<ABC, Nullable<android.view.ViewGroup>>;
 	fragment?: CallableJsonProperty1<ABC, Nullable<IBaseFragment>>;
 	onAttach?: Nullable<(self: ABC) => void>;
 	onUpdate?: Nullable<(self: ABC, ...args: any) => void>;
@@ -16,7 +16,7 @@ interface IFocusableWindow<ABC = IFocusableWindow<any>> {
 }
 
 /**
- * @deprecated
+ * @deprecated EXTREMELLY UNSTABLE
  */
 interface IUniqueWindow<ABC = IUniqueWindow<any>> extends IFocusableWindow<ABC> {
 	id?: CallableJsonProperty1<ABC, Nullable<string>>;

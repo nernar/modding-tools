@@ -2,9 +2,11 @@ class ControlSequence<T extends any> extends Sequence {
 	window?: Nullable<ControlWindow>;
 	dismissWhenCancelled?: boolean;
 	inherited?: boolean;
+
 	constructor(obj?: T) {
 		super(obj);
 	}
+
 	getWindow() {
 		return this.window || null;
 	}
@@ -20,13 +22,14 @@ class ControlSequence<T extends any> extends Sequence {
 	isDismissingWhenCancelled() {
 		return this.dismissWhenCancelled !== undefined ? this.dismissWhenCancelled : false;
 	}
-	getCancellationBackground(error?: Nullable<Scriptable>) {
+	getCancellationBackground(error?: Error) {
 		if (error == null || (typeof error == "object" && error.message == "java.lang.InterruptedException: null")) {
 			return "popupSelectionQueued";
 		}
 		return "popupSelectionLocked";
 	}
-	execute(value: T, control?: Nullable<ControlWindow>) {
+
+	override execute(value: T, control?: ControlWindow) {
 		if (control != null) {
 			this.window = control;
 		} else {
@@ -35,11 +38,11 @@ class ControlSequence<T extends any> extends Sequence {
 		}
 		super.execute(value);
 	}
-	uncount(value: T) {
+	override uncount = (value: T) => {
 		java.lang.Thread.sleep(this.getExpirationTime());
 		return this.count;
 	}
-	create(value: T, active: number) {
+	override create = (value: T, startMs: number) => {
 		if (this.inherited) {
 			this.window = new ControlWindow();
 			this.window.setForegroundImage(this.getForegroundImage());
@@ -52,16 +55,16 @@ class ControlSequence<T extends any> extends Sequence {
 			window.attach();
 		}
 	}
-	update(progress: number, index: number) {
+	override update = (progress: number, index: number) => {
 		let window = this.getWindow();
 		if (window != null) {
 			window.setProgress(progress);
 		}
 	}
-	complete(ellapsed: number, active: number) {
+	override complete = (ellapsedMs: number, startMs: number) => {
 		this.requestDismiss();
 	}
-	cancel(error?: Nullable<Scriptable>) {
+	override cancel = (error?: Error) => {
 		let window = this.getWindow();
 		if (window != null) {
 			window.setLogotypeBackground(this.getCancellationBackground(error));
