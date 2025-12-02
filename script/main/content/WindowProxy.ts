@@ -1,11 +1,15 @@
-const WindowProxy = function() {
-	MCSystem.throwException("Modding Tools: Stub!");
-};
+namespace WindowProxy {
+	export function parseJson(json: IWindowJson): FocusableWindow;
+	export function parseJson(instance: FocusableWindow, json: IWindowJson, preferredWindow?: string): FocusableWindow;
+	export function parseJson(instanceOrJson: FocusableWindow | IWindowJson, json?: IWindowJson, preferredWindow?: string): FocusableWindow {
+		MCSystem.throwException("Modding Tools: Internal exception in Fragment.parseJson!");
+	}
+}
 
 const registerWindowJson = (function() {
 	let windows = {};
 
-	WindowProxy.parseJson = function(instanceOrJson, json, preferredFragment) {
+	WindowProxy.parseJson = function(instanceOrJson: FocusableWindow | IWindowJson, json?: IWindowJson, preferredWindow?: string) {
 		if (!(instanceOrJson instanceof FocusableWindow)) {
 			json = instanceOrJson;
 			instanceOrJson = null;
@@ -14,17 +18,17 @@ const registerWindowJson = (function() {
 		if (json === null || typeof json != "object") {
 			return instanceOrJson;
 		}
-		if (json.type === undefined && preferredFragment !== undefined) {
-			json.type = preferredFragment;
+		if (json.type === undefined && preferredWindow !== undefined) {
+			json.type = preferredWindow as any;
 		}
 		if (windows.hasOwnProperty(json.type)) {
-			return windows[json.type].parseJson.call(this, instanceOrJson || new windows[json.type](), json, preferredFragment);
+			return windows[json.type].parseJson.call(this, instanceOrJson || new windows[json.type](), json, preferredWindow);
 		}
 		log("Modding Tools: Unresolved window " + json.type + ", please make sure that \"type\" property is used anywhere");
 		return instanceOrJson;
 	};
 
-	return function(id, instance) {
+	return function(id: string, instance: any) {
 		if (windows.hasOwnProperty(id)) {
 			log("Modding Tools: Window json " + id + " is already occupied!");
 			return false;

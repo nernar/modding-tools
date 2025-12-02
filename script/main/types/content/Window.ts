@@ -15,6 +15,10 @@ interface IFocusableWindow<ABC = IFocusableWindow<any>> {
 	exitTransition?: CallableJsonProperty1<ABC, Nullable<android.transition.Transition>>;
 }
 
+type IFocusableWindowWithType = IFocusableWindow & {
+	type: "window" | "focusable" | "transition"
+};
+
 /**
  * @deprecated EXTREMELLY UNSTABLE
  */
@@ -23,11 +27,19 @@ interface IUniqueWindow<ABC = IUniqueWindow<any>> extends IFocusableWindow<ABC> 
 	updatable?: CallableJsonProperty1<ABC, boolean>;
 }
 
+type IUniqueWindowWithType = IUniqueWindow & {
+	type: "unique"
+};
+
 interface IFocusablePopup<ABC = IFocusablePopup<any>> extends IFocusableWindow<ABC> {
 	id?: CallableJsonProperty1<ABC, Nullable<string>>;
 	mayDismissed?: CallableJsonProperty1<ABC, boolean>;
 	elements?: CallableJsonProperty1<ABC, CallableJsonProperty2<ABC, object, IBaseFragment> | CallableJsonProperty2<ABC, object, IBaseFragment>[]>;
 }
+
+type IFocusablePopupWithType = IFocusablePopup & {
+	type: "popup"
+};
 
 interface IExpandablePopup<ABC = IExpandablePopup<any>> extends IFocusablePopup<ABC> {
 	title?: CallableJsonProperty1<ABC, Nullable<string>>;
@@ -35,3 +47,9 @@ interface IExpandablePopup<ABC = IExpandablePopup<any>> extends IFocusablePopup<
 	mayDragged?: CallableJsonProperty1<ABC, boolean>;
 	expanded?: CallableJsonProperty1<ABC, boolean>;
 }
+
+type IExpandablePopupWithType = IExpandablePopup & {
+	type: "expandable"
+};
+
+type IWindowJson = IFocusableWindowWithType | IUniqueWindowWithType | IFocusablePopupWithType | IExpandablePopupWithType;

@@ -22,13 +22,13 @@ content/fragment/ScrollFragment.ts
 content/fragment/HorizontalScrollFragment.ts
 content/fragment/ListFragment.ts
 
-content/adapter/ListHolderAdapter.js
-content/adapter/FilterListHolderAdapter.js
+content/adapter/ListHolderAdapter.ts
+content/adapter/FilterListHolderAdapter.ts
 content/shell/ShellObserver.ts
 content/shell/ShellProcessor.ts
 content/shell/ToCLI.ts
 
-content/WindowProxy.js
+content/WindowProxy.ts
 content/FocusableWindow.ts
 content/TransitionWindow.ts
 content/UniqueWindow.ts
@@ -77,7 +77,7 @@ project/ProjectProvider.ts
 project/ScriptConverter.ts
 project/ScriptImporter.ts
 
-debug/LogViewer.js
+debug/LogViewer.ts
 debug/RuntimeCodeEvaluate.js
 
 sequence/AsyncSequence.ts
