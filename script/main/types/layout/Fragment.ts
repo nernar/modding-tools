@@ -1,12 +1,12 @@
 namespace SidebarFragment {
-	export interface IRail<ABC = IRail<any>> extends ILayoutFragment, ISelectableLayoutFragment {
+	export interface IRail<ABC = IRail<any>> extends ILayoutFragment<ABC>, ISelectableLayoutFragment<ABC> {
 		containerBackground?: CallableJsonProperty1<ABC, Nullable<IDrawableJson>>;
 		fetchItem?: Nullable<(self: ABC, item: Rail.IItem, index: number) => Nullable<string>>;
 		expanded?: CallableJsonProperty1<ABC, boolean>;
 	}
 
 	namespace Rail {
-		export interface IItem<ABC = IItem<any>> extends ILayoutFragment, ISelectableFragment {
+		export interface IItem<ABC = IItem<any>> extends ILayoutFragment<ABC>, ISelectableFragment<ABC> {
 			icon?: CallableJsonProperty1<IItem, Nullable<IDrawableJson>>;
 			fetch?: Nullable<(self: ABC) => Nullable<string>>;
 			expanded?: CallableJsonProperty1<ABC, boolean>;
@@ -14,7 +14,7 @@ namespace SidebarFragment {
 	}
 }
 
-interface IAngleCircleFragment<ABC = IAngleCircleFragment<any>> extends ITextFragment<ABC> {
+interface IAngleCircleFragment<ABC = IAngleCircleFragment<any>> extends ITextFragment {
 	value?: CallableJsonProperty1<ABC, number>;
 	change?: Nullable<(self: ABC, radians: number, degress: number) => void>;
 	reset?: Nullable<(self: ABC, radians: number, degress: number) => number>;
@@ -27,11 +27,11 @@ interface IAxisGroupFragment<ABC = IAxisGroupFragment<any>> extends ILayoutFragm
 	resetItem?: Nullable<(self: ABC, item: IBaseFragment, index: number, value: number) => Nullable<number>>;
 }
 
-interface IPropertyInputFragment<ABC = IPropertyInputFragment<any>> extends ITextFragment<ABC> {
+interface IPropertyInputFragment<ABC = IPropertyInputFragment<any>> extends ITextFragment {
 	hint?: CallableJsonProperty1<ABC, string>;
 }
 
-interface ISliderFragment<ABC = ISliderFragment<any>> extends ITextFragment<ABC> {
+interface ISliderFragment<ABC = ISliderFragment<any>> extends ITextFragment {
 	modifiers?: CallableJsonProperty1<ABC, number[]>;
 	modifier?: CallableJsonProperty1<ABC, number>;
 	value?: CallableJsonProperty1<ABC, number>;

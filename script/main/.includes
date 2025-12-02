@@ -41,8 +41,8 @@ content/popup/FocusablePopup.ts
 content/popup/ExpandableFragment.ts
 content/popup/ExpandablePopup.ts
 
-layout/AdditionalMessage.js
-layout/HintAlert.js
+layout/AdditionalMessage.ts
+layout/HintAlert.ts
 layout/ExplorerWindow.js
 layout/EditorFragment.js
 layout/control/OverlayFragment.js
