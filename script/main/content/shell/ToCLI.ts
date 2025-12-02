@@ -23,7 +23,7 @@ const ColorToCLI = {
 	BOLD: "\x1b[1m",
 	DIM: "\x1b[2m",
 	ITALIC: "\x1b[3m",
-	INVERSE: "\x1b[7m" // also selection
+	INVERSE: "\x1b[7m", // also selection
 };
 
 const BackgroundToCLI = {
@@ -48,5 +48,5 @@ const BackgroundToCLI = {
 	AQUA: "\x1b[106m",
 
 	RESET: "\x1b[0m",
-	INVERSE: "\x1b[7m" // also selection
+	INVERSE: "\x1b[7m", // also selection
 };

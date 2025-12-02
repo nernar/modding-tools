@@ -24,18 +24,18 @@ content/fragment/ListFragment.ts
 
 content/adapter/ListHolderAdapter.js
 content/adapter/FilterListHolderAdapter.js
-content/shell/ShellObserver.js
-content/shell/ShellProcessor.js
-content/shell/ToCLI.js
+content/shell/ShellObserver.ts
+content/shell/ShellProcessor.ts
+content/shell/ToCLI.ts
 
 content/WindowProxy.js
 content/FocusableWindow.ts
 content/TransitionWindow.ts
 content/UniqueWindow.ts
-content/window/WindowProvider.js
-content/window/UniqueHelper.js
-content/window/Popups.js
-content/window/LevelProvider.js
+content/window/WindowProvider.ts
+content/window/UniqueHelper.ts
+content/window/Popups.ts
+content/window/LevelProvider.ts
 content/popup/FocusableFragment.ts
 content/popup/FocusablePopup.ts
 content/popup/ExpandableFragment.ts

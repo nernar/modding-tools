@@ -1,8 +1,5 @@
 class ListFragment extends BaseFragment {
 	readonly TYPE: string = "ListFragment";
-	constructor() {
-		super();
-	}
 	resetContainer() {
 		let content = new android.widget.ListView(getContext());
 		content.setLayoutDirection(android.view.View.LAYOUT_DIRECTION_LTR);

@@ -2,20 +2,11 @@
  * In future every window should equals to fragment
  * container from itself, instance rewrites global
  * window with specified container; window is untouched.
- * @todo Do not use constructors to get attached container.
  * @deprecated EXTREMELLY UNSTABLE
  */
 class UniqueWindow extends TransitionWindow {
 	override readonly TYPE: string = "UniqueWindow";
 	protected updatable?: boolean;
-
-	constructor() {
-		super();
-		if (UniqueHelper.wasTypeAttached(this)) {
-			return UniqueHelper.getWindow(this);
-		}
-		return this;
-	}
 
 	isAttached() {
 		return UniqueHelper.isAttached(this);

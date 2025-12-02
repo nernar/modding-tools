@@ -3,7 +3,7 @@
  */
 class FocusablePopup extends TransitionWindow {
 	override readonly TYPE: string = "FocusablePopup";
-	protected id?: string;
+	id?: string;
 	protected mayDismissed?: boolean = true
 	protected fragments?: Fragment[];
 

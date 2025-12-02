@@ -15,7 +15,7 @@ class FocusableWindow {
 	protected exitTransition?: android.transition.Transition;
  
 	onAttach?: () => void;
-	onUpdate?: (...args: []) => void;
+	onUpdate?: (...opts: any[]) => void;
 	onClose?: () => void;
 
 	constructor() {
@@ -175,7 +175,7 @@ class FocusableWindow {
 		if (isAndroid()) {
 			return WindowProvider.getByPopupId(this.popupId);
 		}
-		return ShellObserver.layers.indexOf(this);
+		return ShellObserver.attachedLayers.indexOf(this);
 	}
 	updateWindow() {
 		let fragment = this.getFragment();
@@ -235,19 +235,19 @@ class FocusableWindow {
 		}
 		return false;
 	}
-	update() {
+	update(...opts: any[]) {
 		let fragment = this.getFragment();
 		if (fragment != null) {
-			fragment.update.apply(fragment, arguments);
+			fragment.update(...opts);
 		}
-		this.onUpdate && this.onUpdate.apply(this, arguments);
+		this.onUpdate && this.onUpdate(...opts);
 	}
-	updateWith(when) {
+	updateWith(when?: (fragment: Fragment) => boolean, ...opts: any[]) {
 		let fragment = this.getFragment();
 		if (fragment != null) {
-			fragment.updateWith.apply(fragment, arguments);
+			fragment.updateWith(when, ...opts);
 		}
-		this.onUpdate && this.onUpdate.apply(this, Array.prototype.slice.call(arguments, 1));
+		this.onUpdate && this.onUpdate(...opts);
 	}
 	dismiss() {
 		Logger.Log(this.TYPE + ".dismiss", "FocusableWindow");

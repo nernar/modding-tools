@@ -1,22 +1,22 @@
-const ShellProcessor = {
-	getWidth: function(who) {
+namespace ShellProcessor {
+	export function getWidth(who: string[]) {
 		let width = 0;
 		for (let i = 0; i < who.length; i++) {
 			width = Math.max(width, who[i].length);
 		}
 		return width;
-	},
-	normalize: function(who, space) {
-		let width = this.getWidth(who);
+	}
+	export function normalize(who: string[], space?: string) {
+		let width = getWidth(who);
 		space = space ? "" + space : " ";
 		return who.map(function(value) {
 			return value.length < width ? value + space.repeat(width - value.length) : value;
 		});
-	},
-	append: function(who, what, space) {
+	}
+	export function append(who: string[], what: string, space?: string) {
 		space = space ? "" + space : " ";
 		if (what.length > who.length) {
-			let width = this.getWidth(who);
+			let width = getWidth(who);
 			space = space.repeat(width);
 			let i = 0;
 			for (; i < who.length; i++) {
@@ -32,4 +32,4 @@ const ShellProcessor = {
 		}
 		return who;
 	}
-};
+}

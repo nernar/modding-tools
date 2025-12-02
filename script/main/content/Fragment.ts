@@ -1,12 +1,12 @@
 class Fragment {
 	readonly TYPE: string;
+	protected views: { [key: string]: android.view.View };
+	protected container: Nullable<android.view.View>;
 
 	constructor() {
 		this.views = {};
 	}
 
-	private views: { [key: string]: android.view.View };
-	private container: Nullable<android.view.View>;
 	getContainer() {
 		return this.container || null;
 	}
@@ -17,13 +17,13 @@ class Fragment {
 	getViews() {
 		return this.views || null;
 	}
-	findViewByKey(key) {
+	findViewByKey(key: string) {
 		return this.views[key] || null;
 	}
 	/**
 	 * @requires `isAndroid()`
 	 */
-	findViewById(id) {
+	findViewById(id: number) {
 		let container = this.getContainer();
 		if (container == null) return null;
 		return container.findViewById(id) || null;
@@ -31,12 +31,12 @@ class Fragment {
 	/**
 	 * @requires `isAndroid()`
 	 */
-	findViewByTag(tag) {
+	findViewByTag(tag: any) {
 		let container = this.getContainer();
 		if (container == null) return null;
 		return container.findViewWithTag(tag) || null;
 	}
-	findView(stroke) {
+	findView(stroke: any) {
 		let byKey = this.findViewByKey(stroke);
 		if (isAndroid()) {
 			return byKey || this.findViewById(stroke) || this.findViewByTag(stroke);
@@ -44,7 +44,7 @@ class Fragment {
 		return byKey;
 	}
 
-	private parent: Nullable<Fragment | FocusableWindow>;
+	protected parent: Nullable<Fragment | FocusableWindow>;
 	getParent() {
 		return this.parent || null;
 	}
@@ -63,11 +63,11 @@ class Fragment {
 		return fragment;
 	}
 
-	private token: Nullable<string>;
+	protected token: Nullable<string>;
 	getToken() {
 		return this.token || null;
 	}
-	setToken(token) {
+	setToken(token: string) {
 		if (token != null) {
 			this.token = token;
 		} else {
@@ -75,7 +75,7 @@ class Fragment {
 		}
 		return this;
 	}
-	findParentFragment(token) {
+	findParentFragment(token: string) {
 		let parent = this.getParent();
 		if (parent instanceof Fragment) {
 			if (parent.getToken() == token) {
@@ -85,7 +85,7 @@ class Fragment {
 		}
 		return null;
 	}
-	findFragmentInParent(token) {
+	findFragmentInParent(token: string) {
 		let parent = this.getParent();
 		if (parent instanceof Fragment) {
 			if (parent instanceof LayoutFragment) {
@@ -102,9 +102,9 @@ class Fragment {
 		throw new Error("Method not implemented.");
 	}
 
-	protected onAttach: any;
-	protected onDeattach: any;
-	attach(parent) {
+	protected onAttach?: () => void;
+	protected onDeattach?: () => void;
+	attach(parent: Fragment | FocusableWindow) {
 		if (parent == null || parent == this.parent) {
 			if (parent == null) {
 				MCSystem.throwException("Modding Tools: Fragment.attach(*) was called with an invalid parent: " + parent);
@@ -112,9 +112,9 @@ class Fragment {
 			return;
 		}
 		this.parent = parent;
-		this.onAttach && this.onAttach.apply(this, arguments);
+		this.onAttach && this.onAttach();
 	}
-	setOnAttachListener(listener) {
+	setOnAttachListener(listener: () => void) {
 		if (listener != null) {
 			this.onAttach = listener;
 		} else {
@@ -124,11 +124,11 @@ class Fragment {
 	}
 	deattach() {
 		if (this.parent != null) {
-			this.onDeattach && this.onDeattach.apply(this, arguments);
+			this.onDeattach && this.onDeattach();
 		}
 		delete this.parent;
 	}
-	setOnDeattachListener(listener) {
+	setOnDeattachListener(listener: () => void) {
 		if (listener != null) {
 			this.onDeattach = listener;
 		} else {
@@ -137,18 +137,18 @@ class Fragment {
 		return this;
 	}
 
-	protected onUpdate: any;
-	protected updateFragment: any;
-	update() {
-		this.updateFragment && this.updateFragment.apply(this, arguments);
-		this.onUpdate && this.onUpdate.apply(this, arguments);
+	protected onUpdate?: (...opts: any[]) => void;
+	updateFragment?: (...opts: any[]) => void;
+	update(...opts: any[]) {
+		this.updateFragment && this.updateFragment(...opts);
+		this.onUpdate && this.onUpdate(...opts);
 	}
-	updateWith(when) {
+	updateWith(when?: (fragment: Fragment) => boolean, ...opts: any[]) {
 		if (typeof when != "function" || when(this)) {
-			this.update.apply(this, Array.prototype.slice.call(arguments, 1));
+			this.update(...opts);
 		}
 	}
-	setOnUpdateListener(listener) {
+	setOnUpdateListener(listener: (...opts: any[]) => void) {
 		if (listener != null) {
 			this.onUpdate = listener;
 		} else {
@@ -157,11 +157,11 @@ class Fragment {
 		return this;
 	}
 
-	private selectable: boolean = false;
+	protected selectable: boolean = false;
 	isSelectable() {
 		return this.selectable;
 	}
-	setIsSelectable(selectable) {
+	setIsSelectable(selectable: boolean) {
 		this.selectable = !!selectable;
 		return this;
 	}
@@ -185,7 +185,7 @@ class Fragment {
 		return false;
 	}
 
-	private hoverable: boolean = true;
+	protected hoverable: boolean = true;
 	/**
 	 * @requires `isCLI()`
 	 */
