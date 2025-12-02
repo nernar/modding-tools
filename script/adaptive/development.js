@@ -39,7 +39,7 @@ MenuWindow.parseJson = function() {
 	if (debugAttachControlTools && REVISION.startsWith("develop")) {
 		let category = instanceOrJson.addCategory(translate("Development"));
 		category.addItem("menuBoardInsert", translate("Evaluate"), function() {
-			RuntimeCodeEvaluate.showSpecifiedDialog();
+			getGlobalRuntimeCodeEvaluator().showSpecifiedDialog();
 		});
 		category.addItem("inspectorType", translate("Check"), function() {
 			CHECKOUT("provider.js", function(who) {
@@ -47,7 +47,7 @@ MenuWindow.parseJson = function() {
 			});
 		});
 		category.addItem("explorerExtensionScript", translate("Launch"), function() {
-			RuntimeCodeEvaluate.loadEvaluate();
+			getGlobalRuntimeCodeEvaluator().loadEvaluate();
 		});
 		category.addItem("inspectorObject", translate("Require"), function() {
 			select(translate("What's need to require?"), getDebugScripts(), function(index, path) {
@@ -110,6 +110,14 @@ MenuWindow.parseJson = function() {
 };
 
 let debugAttachBackground = false;
+let debugRuntimeCodeEvaluator = null;
+
+const getGlobalRuntimeCodeEvaluator = function() {
+	if (debugRuntimeCodeEvaluator == null) {
+		debugRuntimeCodeEvaluator = new RuntimeCodeEvaluator();
+	}
+	return debugRuntimeCodeEvaluator;
+};
 
 (function(self) {
 	let action;
@@ -125,7 +133,7 @@ let debugAttachBackground = false;
 					return true;
 				}
 			}
-			RuntimeCodeEvaluate.showSpecifiedDialog();
+			getGlobalRuntimeCodeEvaluator().showSpecifiedDialog();
 			return true;
 		});
 		this.setOnHoldListener = function(what) {

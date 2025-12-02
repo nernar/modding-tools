@@ -54,7 +54,7 @@ const API = assign({}, {
 	toRawComplexUnitSp: toRawComplexUnitSp,
 
 	// Global registry
-	registerTool: function(id, tool) {
+	registerTool(id: string, tool: any) {
 		if (Tools.hasOwnProperty(id)) {
 			Logger.Log("Modding Tools: Id " + id + " is already occupied!", "WARNING");
 			return;
@@ -62,7 +62,7 @@ const API = assign({}, {
 		log("Modding Tools: Registered tool " + id + " shortcut");
 		Tools[id] = tool;
 	},
-	registerMenuTool: function(id, tool, entry) {
+	registerMenuTool(id: string, tool: any, entry: ProjectTool.MenuFactory) {
 		if (Tools.hasOwnProperty(id)) {
 			Logger.Log("Modding Tools: Id " + id + " is already occupied!", "WARNING");
 			return;
@@ -184,7 +184,6 @@ const API = assign({}, {
 	UniqueWindow: UniqueWindow,
 	WindowProvider: WindowProvider,
 	UniqueHelper: UniqueHelper,
-	LevelProvider: LevelProvider,
 	FocusableFragment: FocusableFragment,
 	FocusablePopup: FocusablePopup,
 	ExpandableFragment: ExpandableFragment,
@@ -201,31 +200,31 @@ const API = assign({}, {
 	SidebarWindow: SidebarWindow,
 
 	// Functions used inside popup prototypes
-	openPopup: function(id, popup) {
+	openPopup(id: string, popup: FocusablePopup) {
 		Popups.open(popup, id);
 	},
-	closePopup: function(id) {
+	closePopup(id: string) {
 		return Popups.closeIfOpened(id);
 	},
-	closePopupGroup: function(id) {
+	closePopupGroup(id: string) {
 		Popups.closeAllByTag(id);
 	},
-	closeAllPopups: function() {
+	closeAllPopups() {
 		Popups.closeAll();
 	},
-	hasOpenedPopup: function(id) {
+	hasOpenedPopup(id: string) {
 		return Popups.hasOpenedByName(id);
 	},
-	updatePopup: function(id) {
-		return Popups.updateAtName(id);
+	updatePopup(id: string, ...opts: any[]) {
+		return Popups.updateAtName(id, ...opts);
 	},
-	updateAllPopups: function() {
+	updateAllPopups() {
 		Popups.updateAll();
 	},
-	getPopupIds: function() {
+	getPopupIds() {
 		return Popups.getOpenedIds();
 	},
-	getPopups: function() {
+	getPopups() {
 		return Popups.getOpened();
 	},
 
@@ -270,7 +269,7 @@ const API = assign({}, {
 	EditorTool: EditorTool,
 	attachProjectTool: attachProjectTool,
 	attachEditorTool: attachEditorTool,
-	attachTool: function(id, when) {
+	attachTool(id: string, when?: (tool: Tool) => void) {
 		if (!Tools.hasOwnProperty(id)) {
 			Logger.Log("Modding Tools: Not found tool " + id + ", consider have you registered it", "WARNING");
 			return;
@@ -285,23 +284,23 @@ const API = assign({}, {
 	// Specific content
 	LogViewer: LogViewer,
 	LevelProvider: LevelProvider,
-	RuntimeCodeEvaluate: RuntimeCodeEvaluate,
+	RuntimeCodeEvaluator: RuntimeCodeEvaluator,
 
 	// For internal support launching other modifications
 	Module: {
-		canLeaveAtMoment: function() {
+		canLeaveAtMoment() {
 			return !isSupportEnv;
 		},
-		getCurrentEnvironment: function() {
+		getCurrentEnvironment() {
 			return currentEnvironment;
 		},
-		sendBackstageStatus: function() {
+		sendBackstageStatus() {
 			restart();
 		}
 	}
 });
 
-(function(who) {
+((...who: string[]) => {
 	for (let element in who) {
 		if (this.hasOwnProperty(element)) {
 			API[element] = who[element];
@@ -309,13 +308,11 @@ const API = assign({}, {
 	}
 })("USER_ID", "Connectivity", "ModBrowser", "Mehwrap");
 
-const notifyCoreEngineLoaded = function() {
-	CoreEngine.ModAPI.registerAPI("ModdingTools", API);
-};
+const notifyCoreEngineLoaded = () => CoreEngine.ModAPI.registerAPI("ModdingTools", API);
 
-const hideInsetsOnScreen = function() {
+const hideInsetsOnScreen = () => {
 	if (isHorizon) {
-		handle(function() {
+		handle(() => {
 			let window = getContext().getWindow();
 			if (android.os.Build.VERSION.SDK_INT >= 28) {
 				// Content renders into the cutout area in both portrait and landscape modes.
@@ -351,14 +348,14 @@ const hideInsetsOnScreen = function() {
 	}
 };
 
-const getCoreEngineAndInjectIfNeeded = function() {
+const getCoreEngineAndInjectIfNeeded = () => {
 	try {
 		if (isCoreEngineLoaded()) {
 			return CoreEngine;
 		}
 		let instance = null;
 		let CoreEngineAPI = InnerCorePackages.api.mod.coreengine.CoreEngineAPI;
-		let field;
+		let field: java.lang.reflect.Field;
 		try {
 			field = CoreEngineAPI.__javaObject__.getDeclaredField("ceHandlerSingleton");
 		} catch (e) {
@@ -380,6 +377,6 @@ const getCoreEngineAndInjectIfNeeded = function() {
 	return CoreEngine;
 };
 
-Callback.addCallback("PreBlocksDefined", function() {
+Callback.addCallback("PreBlocksDefined", () =>{
 	getCoreEngineAndInjectIfNeeded();
 });

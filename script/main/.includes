@@ -78,7 +78,7 @@ project/ScriptConverter.ts
 project/ScriptImporter.ts
 
 debug/LogViewer.ts
-debug/RuntimeCodeEvaluate.js
+debug/RuntimeCodeEvaluator.ts
 
 sequence/AsyncSequence.ts
 sequence/SnackSequence.ts
@@ -94,7 +94,7 @@ algorithm/keyboard.ts
 algorithm/launcher.ts
 
 integration/launcher.ts
-integration/shared.js
+integration/shared.ts
 
 job/.
 indev/.

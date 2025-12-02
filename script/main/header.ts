@@ -150,7 +150,7 @@ const InnerCorePackages = isHorizon ? com.zhekasmirnov.innercore : Packages.zhek
 IMPORT("Action");
 IMPORT("Sequence");
 
-const CoreEngine = {
+const CoreEngine: any = {
 	CORE_ENGINE_API_LEVEL: 0
 };
 
