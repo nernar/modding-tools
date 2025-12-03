@@ -49,7 +49,7 @@ layout/control/OverlayFragment.ts
 layout/control/OverlayWindow.ts
 layout/control/ControlFragment.ts
 layout/control/ControlWindow.ts
-layout/menu/MenuWindow.js
+layout/menu/MenuWindow.ts
 layout/sidebar/SidebarFragment.js
 layout/sidebar/SidebarWindow.js
 
