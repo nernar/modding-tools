@@ -6,7 +6,7 @@ namespace WindowProxy {
 	}
 }
 
-const registerWindowJson = (function() {
+const registerWindowJson = (() => {
 	let windows = {};
 
 	WindowProxy.parseJson = function(instanceOrJson: FocusableWindow | IWindowJson, json?: IWindowJson, preferredWindow?: string) {

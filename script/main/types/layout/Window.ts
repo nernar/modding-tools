@@ -38,7 +38,7 @@ namespace MenuWindow {
 		categories?: CallableJsonProperty1<IProjectHeader, CallableJsonProperty2<IProjectHeader, object, ProjectHeader.ICategory> | CallableJsonProperty2<IProjectHeader, object, ProjectHeader.ICategory>[]>;
 	}
 
-	namespace ProjectHeader {
+	export namespace ProjectHeader {
 		export interface ICategory {
 			title?: CallableJsonProperty1<ICategory, string>;
 			clickItem?: Nullable<(self: ICategory, item: Category.IItem, index: number) => void>;
@@ -46,7 +46,7 @@ namespace MenuWindow {
 			items?: CallableJsonProperty1<ICategory, CallableJsonProperty2<ICategory, object, Category.IItem> | CallableJsonProperty2<ICategory, object, Category.IItem>[]>;
 		}
 	
-		namespace Category {
+		export namespace Category {
 			export interface IItem {
 				background?: CallableJsonProperty1<IItem, Nullable<IDrawableJson>>;
 				icon?: CallableJsonProperty1<IItem, Nullable<IDrawableJson>>;
@@ -66,7 +66,7 @@ namespace MenuWindow {
 		items?: CallableJsonProperty1<ICategory, CallableJsonProperty2<ICategory, object, Category.IItem> | CallableJsonProperty2<ICategory, object, Category.IItem>[]>;
 	}
 
-	namespace Category {
+	export namespace Category {
 		export interface IItem {
 			background?: CallableJsonProperty1<IItem, Nullable<IDrawableJson>>;
 			icon?: CallableJsonProperty1<IItem, Nullable<IDrawableJson>>;

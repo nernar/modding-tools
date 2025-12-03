@@ -45,10 +45,10 @@ layout/AdditionalMessage.ts
 layout/HintAlert.ts
 layout/ExplorerWindow.js
 layout/EditorFragment.js
-layout/control/OverlayFragment.js
-layout/control/OverlayWindow.js
-layout/control/ControlFragment.js
-layout/control/ControlWindow.js
+layout/control/OverlayFragment.ts
+layout/control/OverlayWindow.ts
+layout/control/ControlFragment.ts
+layout/control/ControlWindow.ts
 layout/menu/MenuWindow.js
 layout/sidebar/SidebarFragment.js
 layout/sidebar/SidebarWindow.js

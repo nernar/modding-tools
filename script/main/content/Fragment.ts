@@ -1,7 +1,7 @@
 class Fragment {
 	readonly TYPE: string;
 	protected views: { [key: string]: android.view.View };
-	protected container: Nullable<android.view.View>;
+	protected container: android.view.ViewGroup;
 
 	constructor() {
 		this.views = {};
@@ -10,7 +10,10 @@ class Fragment {
 	getContainer() {
 		return this.container || null;
 	}
-	setContainerView(view: Nullable<android.view.View>) {
+	setContainerView(view: android.view.ViewGroup) {
+		if (!(view instanceof android.view.ViewGroup)) {
+			MCSystem.throwException("Modding Tools: Fragment.setContainerView accepts only instances of ViewGroup, but got: " + view + "!");
+		}
 		this.container = view;
 		return this;
 	}
