@@ -1,27 +1,24 @@
-const CONSOLE_TOOL = (function() {
+const CONSOLE_TOOL = (() => {
 	return new Tool({
 		controlDescriptor: {
 			logotype: "menuBack",
-			collapsedClick: function(tool, control) {
+			collapsedClick(tool, control) {
 				tool.deattach();
 			}
 		},
-		deattach: function() {
+		deattach() {
 			let snack = UniqueHelper.getWindow(HintAlert.prototype.TYPE);
 			if (snack !== null) snack.dismiss();
 			Popups.closeIfOpened("evaluate");
-			let self = this;
-			attachProjectTool(function() {
-				Tool.prototype.deattach.apply(self, arguments);
-			});
+			attachProjectTool(null, () => this.deattach());
 		},
-		attach: function() {
+		attach() {
 			Tool.prototype.attach.apply(this, arguments);
 			this.setupConsole();
 			this.addEditable();
 		},
-		setupConsole: function() {
-			let snack = UniqueHelper.getWindow(HintAlert.prototype.TYPE);
+		setupConsole() {
+			let snack = UniqueHelper.getWindow(HintAlert.prototype.TYPE) as HintAlert;
 			if (snack !== null) snack.dismiss();
 			snack = new HintAlert();
 			snack.setConsoleMode(true);
@@ -29,19 +26,21 @@ const CONSOLE_TOOL = (function() {
 			snack.pin();
 			snack.attach();
 		},
-		addEditable: function() {
+		addEditable() {
 			let popup = new ExpandablePopup("evaluate");
 			popup.setTitle(translate("Evaluate"));
 			let layout = popup.getFragment();
 			let input = layout.addPropertyInput(translate("Hi, I'm evaluate stroke"), "29 / 5");
-			layout.addSolidButton(translate("Eval"), function() {
+			layout.addSolidButton(translate("Eval"), () => {
 				let action = input.getText().trim();
 				if (action.length > 0) {
 					showHint(" > " + action);
 					let result = compileData(action);
 					if (result.lineNumber !== undefined) {
 						showHint(result.message, ColorDrawable.parseColor("RED"));
-					} else showHint("" + result, ColorDrawable.parseColor("LTGRAY"));
+					} else {
+						showHint("" + result, ColorDrawable.parseColor("LTGRAY"));
+					}
 				}
 			});
 			popup.setIsMayDismissed(false);
@@ -50,13 +49,13 @@ const CONSOLE_TOOL = (function() {
 	});
 })();
 
-const attachConsoleTool = function(post) {
+const attachConsoleTool = (post?: (tool: Tool) => void) => {
 	CONSOLE_TOOL.deattach();
 	if (!CONSOLE_TOOL.isAttached()) {
 		CONSOLE_TOOL.attach();
 	}
 	CONSOLE_TOOL.queue();
-	handle(function() {
+	handle(() => {
 		CONSOLE_TOOL.collapse();
 		let accepted = true;
 		try {
@@ -67,9 +66,7 @@ const attachConsoleTool = function(post) {
 			reportError(e);
 		}
 		if (accepted) {
-			attachProjectTool(function() {
-				CONSOLE_TOOL.deattach();
-			});
+			attachProjectTool(null, () => CONSOLE_TOOL.deattach());
 		}
 	});
 };

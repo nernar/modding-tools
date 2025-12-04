@@ -1,5 +1,5 @@
 class InteractionTool extends Tool {
-	protected interactionDescriptor: CallableJsonProperty1<FocusablePopup[], (FocusablePopup | IFocusablePopup)[]>;
+	interactionDescriptor: CallableJsonProperty1<FocusablePopup[], (FocusablePopup | IFocusablePopup)[]>;
 	protected interactionWindows: Nullable<FocusablePopup[]>;
 
 	constructor(object?: Partial<InteractionTool>) {

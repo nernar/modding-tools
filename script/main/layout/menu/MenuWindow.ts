@@ -1284,13 +1284,6 @@ namespace MenuWindow {
 			return instanceOrJson;
 		}
 
-		interface ItemOverloadDirect {
-			(src?: IDrawableJson, title?: string, action?: (item: Item) => void)
-		}
-		interface ItemOverloadWithParent {
-			(parent: MenuWindow.Category, src?: IDrawableJson, title?: string, action?: (item: Item) => void)
-		}
-
 		export class Item {
 			content: android.widget.FrameLayout;
 			views: {
@@ -1309,18 +1302,18 @@ namespace MenuWindow {
 			protected __click?: (item: Item) => void;
 			protected __hold?: (item: Item) => boolean | void;
 
-			constructor(...args: Parameters<ItemOverloadDirect> | Parameters<ItemOverloadWithParent>) {
+			constructor(src?: IDrawableJson, title?: string, action?: typeof this.__click);
+			constructor(parent: MenuWindow.Category, src?: IDrawableJson, title?: string, action?: typeof this.__click);
+			constructor(parentOrSrc?, srcOrTitle?, titleOrAction?, action?) {
 				if (isAndroid()) {
 					this.resetContent();
 				}
-				if (args[0] instanceof MenuWindow.Category) {
-					const [parentOrSrc, srcOrTitle, titleOrAction, action] = args as Parameters<ItemOverloadWithParent>;
+				if (parentOrSrc instanceof MenuWindow.Category) {
 					this.setParentCategory(parentOrSrc);
 					srcOrTitle && this.setImage(srcOrTitle);
 					titleOrAction && this.setTitle(titleOrAction);
 					action && this.setOnClickListener(action);
 				} else {
-					const [parentOrSrc, srcOrTitle, titleOrAction] = args as Parameters<ItemOverloadDirect>;
 					parentOrSrc && this.setImage(parentOrSrc);
 					srcOrTitle && this.setTitle(srcOrTitle);
 					titleOrAction && this.setOnClickListener(titleOrAction);
@@ -1712,5 +1705,3 @@ namespace MenuWindow {
 
 	export type Elements = Header | ProjectHeader | Category | Message;
 }
-
-new MenuWindow.Category.Item()

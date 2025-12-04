@@ -49,8 +49,7 @@ interface IAnimationDrawable<ABC = IAnimationDrawable<any>> extends IDrawable<AB
 	oneShot?: CallableJsonProperty1<ABC, boolean>;
 }
 
-type IDrawableJson = string | number
-	| (IColorDrawable & { color: IColorDrawable["color"] })
+type IDrawableScriptable = (IColorDrawable & { color: IColorDrawable["color"] })
 	| (IBitmapDrawable & { bitmap: IBitmapDrawable["bitmap"] })
 	| (ILayerDrawable & { layers: ILayerDrawable["layers"] })
 	| (IAnimationDrawable & { frames: IAnimationDrawable["frames"] })
@@ -62,3 +61,5 @@ type IDrawableJson = string | number
 			location: IClipDrawable["location"]
 		})
 	);
+
+type IDrawableJson = string | number | IDrawableScriptable;

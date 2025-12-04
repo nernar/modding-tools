@@ -53,7 +53,7 @@ namespace MenuWindow {
 				title?: CallableJsonProperty1<IItem, string>;
 				description?: CallableJsonProperty1<IItem, string>;
 				click?: Nullable<(self: IItem, index: number) => void>;
-				hold?: Nullable<(self: IItem, index: number) => boolean>;
+				hold?: Nullable<(self: IItem, index: number) => void | boolean>;
 			}
 		}
 	}
@@ -72,7 +72,7 @@ namespace MenuWindow {
 			icon?: CallableJsonProperty1<IItem, Nullable<IDrawableJson>>;
 			title?: CallableJsonProperty1<IItem, Nullable<string>>;
 			click?: Nullable<(self: IItem, index: number) => void>;
-			hold?: Nullable<(self: IItem, index: number) => boolean>;
+			hold?: Nullable<(self: IItem, index: number) => void | boolean>;
 			badgeOverlay?: CallableJsonProperty1<IItem, Nullable<IDrawableJson>>;
 			badgeText?: CallableJsonProperty1<IItem, Nullable<string>>;
 		}

@@ -1,5 +1,5 @@
 class MenuTool extends InteractionTool {
-	protected menuDescriptor: CallableJsonProperty1<MenuWindow, IMenuWindow>;
+	menuDescriptor: CallableJsonProperty1<MenuWindow, IMenuWindow>;
 	protected menuWindow: Nullable<MenuWindow>;
 
 	constructor(object?: Partial<MenuTool>) {
@@ -92,7 +92,7 @@ class MenuTool extends InteractionTool {
 		if (menu) menu.dismiss();
 		super.collapse();
 	}
-	override queue(what: any) {
+	override queue(what?: any) {
 		let menu = this.getMenuWindow();
 		if (menu) menu.dismiss();
 		super.queue(what);

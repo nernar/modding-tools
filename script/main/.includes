@@ -51,7 +51,7 @@ layout/control/ControlFragment.ts
 layout/control/ControlWindow.ts
 layout/menu/MenuWindow.ts
 layout/sidebar/SidebarFragment.js
-layout/sidebar/SidebarWindow.js
+layout/sidebar/SidebarWindow.ts
 
 layout/fragment/CategoryTitleFragment.js
 layout/fragment/ExplanatoryFragment.js
@@ -84,8 +84,8 @@ sequence/AsyncSequence.ts
 sequence/SnackSequence.ts
 sequence/ControlSequence.ts
 
-tools/project.js
-tools/console.js
+tools/project.ts
+tools/console.ts
 
 algorithm/config.ts
 algorithm/auxiliary.ts

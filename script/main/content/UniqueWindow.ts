@@ -38,8 +38,8 @@ class UniqueWindow extends TransitionWindow {
 }
 
 namespace UniqueWindow {
-	export function parseJson(json: IUniqueWindow): UniqueWindow;
-	export function parseJson(instance: UniqueWindow, json: IUniqueWindow): UniqueWindow;
+	export function parseJson(json?: IUniqueWindow): UniqueWindow;
+	export function parseJson(instance: UniqueWindow, json?: IUniqueWindow): UniqueWindow;
 	export function parseJson(instanceOrJson: UniqueWindow | IUniqueWindow, json?: IUniqueWindow) {
 		if (!(instanceOrJson instanceof UniqueWindow)) {
 			json = instanceOrJson;

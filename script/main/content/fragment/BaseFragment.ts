@@ -257,12 +257,6 @@ namespace BaseFragment {
 }
 
 interface IBaseFragment<ABC = IBaseFragment<any>> {
-	selectionType(json: IBaseFragment<IBaseFragment<any>>, selectionType: any, arg2: any[]): any;
-	selectedBackground(json: IBaseFragment<IBaseFragment<any>>, selectedBackground: any, arg2: any[]): any;
-	unselectedBackground(json: IBaseFragment<IBaseFragment<any>>, unselectedBackground: any, arg2: any[]): any;
-	selected(json: IBaseFragment<IBaseFragment<any>>, selected: any, arg2: any[]): unknown;
-	select(json: IBaseFragment<IBaseFragment<any>>, select: any, arg2: any): any;
-	unselect(json: IBaseFragment<IBaseFragment<any>>, unselect: any, arg2: any): any;
 	type?: Nullable<string>;
 	attach?: (parent: Fragment | FocusableWindow) => void;
 	deattach?: () => void;

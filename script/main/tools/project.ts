@@ -1,9 +1,9 @@
-const Tools = {};
+const Tools: { [id: string]: Tool } = {};
 
-const PROJECT_TOOL = (function() {
+const PROJECT_TOOL = (() => {
 	return new ProjectTool({
 		tools: {},
-		contentProjectDescriptor: function(tool) {
+		contentProjectDescriptor(tool) {
 			let project = ProjectProvider.getProject().getAll();
 			if (project.length > 0) {
 				let categories = {};
@@ -25,7 +25,7 @@ const PROJECT_TOOL = (function() {
 							icon: "inspectorObject",
 							title: translate("Tool '%s'", type),
 							description: translate("%s bytes", JSON.stringify(entry).length),
-							click: function() {
+							click() {
 								if (type == "unknown") {
 									showHint(translate("Tool is not availabled"), $.Color.RED);
 									return;
@@ -49,7 +49,7 @@ const PROJECT_TOOL = (function() {
 									getContext().startActivity(intent);
 								}, translate("Open in web"));
 							},
-							hold: function() {
+							hold() {
 								PROJECT_TOOL.confirmProjectEntryRemoval(longTermSupportIndex);
 							}
 						});
@@ -59,13 +59,13 @@ const PROJECT_TOOL = (function() {
 					if (categories[type].title == type) {
 						categories[type].title = factory.getEntriesCategory() || type;
 					}
-					let descriptor = {
+					let descriptor: MenuWindow.ProjectHeader.Category.IItem = {
 						icon: factory.getImage(),
 						title: factory.getTitle(),
-						click: function() {
+						click() {
 							attachEditorTool(type, entry);
 						},
-						hold: function() {
+						hold() {
 							PROJECT_TOOL.confirmProjectEntryRemoval(longTermSupportIndex, descriptor.title);
 						}
 					};
@@ -85,7 +85,7 @@ const PROJECT_TOOL = (function() {
 			}
 		},
 
-		contentEntryDescriptor: function(tool) {
+		contentEntryDescriptor(tool) {
 			if (!isEmpty(tool.tools)) {
 				let items = [];
 				for (let id in tool.tools) {
@@ -96,7 +96,7 @@ const PROJECT_TOOL = (function() {
 						title: entry.getTitle(),
 						badgeText: entry.getBadgeText(),
 						badgeOverlay: entry.getBadgeOverlay(),
-						click: function(tool, item) {
+						click(tool, item) {
 							attachEditorTool(Tools[longTermSupportIdentifier]);
 						}
 					});
@@ -108,7 +108,7 @@ const PROJECT_TOOL = (function() {
 		},
 
 		menuDescriptor: {
-			elements: [function(tool) {
+			elements: [(tool) => {
 				if (REVISION.indexOf("alpha") != -1) {
 					return {
 						type: "category",
@@ -117,20 +117,20 @@ const PROJECT_TOOL = (function() {
 						items: [{
 							icon: "menuBoardInsert",
 							title: translate("Console"),
-							click: function(tool, item) {
+							click(tool, item) {
 								tool.deattach();
 								attachConsoleTool();
 							}
 						}, {
 							icon: "inspectorMeasure",
 							title: translate("Log"),
-							click: function(tool, item) {
+							click(tool, item) {
 								LogViewer.show();
 							}
 						}, {
 							icon: "explorer",
 							title: translate("Explorer"),
-							click: function(tool, item) {
+							click(tool, item) {
 								let explorer = new ExplorerWindow();
 								explorer.setMultipleSelectable(true);
 								let bar = explorer.addPath();
@@ -146,16 +146,16 @@ const PROJECT_TOOL = (function() {
 			}]
 		},
 
-		confirmProjectEntryRemoval: function(index, title) {
+		confirmProjectEntryRemoval(index, title) {
 			confirm(title || translate("Entry removal"),
 				translate("Entry contents will be removed.") + "\n" + translate("Do you wish to continue?"),
-				function() {
+				() => {
 					ProjectProvider.getProject().getAll().splice(index, 1);
 					PROJECT_TOOL.describeMenu();
 				});
 		},
 
-		sequence: function(sequence) {
+		sequence(sequence) {
 			if (sequence instanceof Sequence) {
 				ProjectTool.prototype.sequence.call(this, sequence);
 			}
@@ -173,15 +173,15 @@ const PROJECT_TOOL = (function() {
 	});
 })();
 
-const attachProjectTool = function(source, post) {
+const attachProjectTool = (source?: Project, post?: (tool: ProjectTool) => void) => {
 	if (!PROJECT_TOOL.isAttached()) {
 		PROJECT_TOOL.attach();
 	}
 	PROJECT_TOOL.queue();
-	handleThread(function() {
+	handleThread(() => {
 		PROJECT_TOOL.sequence();
 		let accepted = PROJECT_TOOL.open(source);
-		handle(function() {
+		handle(() => {
 			if (!accepted) {
 				if (source !== undefined) {
 					return attachProjectTool(undefined, post);
@@ -206,7 +206,7 @@ const attachProjectTool = function(source, post) {
 	});
 };
 
-const attachEditorTool = function(who, what, post) {
+const attachEditorTool = (who: string | Tool, what?: any, post?: (tool: Tool) => void) => {
 	try {
 		if (!(who instanceof Tool)) {
 			who = Tools[who];
@@ -222,7 +222,7 @@ const attachEditorTool = function(who, what, post) {
 	} catch (e) {
 		reportError(e);
 		try {
-			if (who != null) {
+			if (who != null && who instanceof Tool) {
 				who.deattach();
 			}
 		} catch (e) {
@@ -231,14 +231,14 @@ const attachEditorTool = function(who, what, post) {
 		attachProjectTool();
 		return;
 	}
-	handleThread(function() {
+	handleThread(() => {
 		try {
 			who.sequence();
 			let accepted = true;
 			if (who instanceof EditorTool) {
 				accepted = who.open(what);
 			}
-			handle(function() {
+			handle(() => {
 				try {
 					if (!accepted) {
 						MCSystem.throwException("Modding Tools: Target project is not validated, aborting!");
@@ -247,9 +247,7 @@ const attachEditorTool = function(who, what, post) {
 						try {
 							who.describe();
 							post && post(who);
-							handle(function() {
-								who.unqueue();
-							}, 1000);
+							handle(() => who.unqueue(), 1000);
 							accepted = false;
 						} catch (e) {
 							if (e != null) {

@@ -1,11 +1,11 @@
 namespace SidebarFragment {
 	export interface IRail<ABC = IRail<any>> extends ILayoutFragment<ABC>, ISelectableLayoutFragment<ABC> {
 		containerBackground?: CallableJsonProperty1<ABC, Nullable<IDrawableJson>>;
-		fetchItem?: Nullable<(self: ABC, item: Rail.IItem, index: number) => Nullable<string>>;
+		fetchItem?: Nullable<(self: ABC, item: SidebarFragment.Rail.IItem, index: number) => Nullable<string>>;
 		expanded?: CallableJsonProperty1<ABC, boolean>;
 	}
 
-	namespace Rail {
+	export namespace Rail {
 		export interface IItem<ABC = IItem<any>> extends ILayoutFragment<ABC>, ISelectableFragment<ABC> {
 			icon?: CallableJsonProperty1<IItem, Nullable<IDrawableJson>>;
 			fetch?: Nullable<(self: ABC) => Nullable<string>>;

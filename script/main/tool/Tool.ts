@@ -1,6 +1,6 @@
 class Tool {
 	protected state: number = Tool.State.INACTIVE;
-	protected controlDescriptor: CallableJsonProperty1<ControlWindow, IControlWindow>;
+	controlDescriptor: CallableJsonProperty1<ControlWindow, IControlWindow>;
 	protected controlWindow: Nullable<ControlWindow>;
 
 	constructor(object?: Partial<Tool>) {
@@ -119,14 +119,14 @@ class Tool {
 	isCollapsed() {
 		return this.state == Tool.State.COLLAPSED;
 	}
-	queue(what: any) {
+	queue(what?: any) {
 		this.state = Tool.State.QUEUED;
 		let control = this.getControlWindow();
 		if (control == null) return;
 		control.transformLogotype();
 		control.attach();
 	}
-	sequence(sequence: Nullable<Sequence>) {
+	sequence(sequence?: Nullable<Sequence>) {
 		if (sequence instanceof Sequence) {
 			if (sequence.getThread() == null) {
 				if (sequence instanceof ControlSequence) {

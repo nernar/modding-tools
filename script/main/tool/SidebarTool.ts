@@ -1,6 +1,6 @@
 class SidebarTool extends MenuTool {
 	sidebarDescriptor: CallableJsonProperty1<SidebarWindow, SidebarFragment.IRail>;
-	sidebarWindow: Nullable<SidebarWindow>;
+	protected sidebarWindow: Nullable<SidebarWindow>;
 
 	constructor(object?: Partial<SidebarTool>) {
 		super(object);
