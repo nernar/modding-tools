@@ -1284,6 +1284,13 @@ namespace MenuWindow {
 			return instanceOrJson;
 		}
 
+		interface ItemOverloadDirect {
+			(src?: IDrawableJson, title?: string, action?: (item: Item) => void)
+		}
+		interface ItemOverloadWithParent {
+			(parent: MenuWindow.Category, src?: IDrawableJson, title?: string, action?: (item: Item) => void)
+		}
+
 		export class Item {
 			content: android.widget.FrameLayout;
 			views: {
@@ -1302,24 +1309,25 @@ namespace MenuWindow {
 			protected __click?: (item: Item) => void;
 			protected __hold?: (item: Item) => boolean | void;
 
-			constructor(src?: IDrawableJson, title?: string, action?: typeof this.__click);
-			constructor(parent: MenuWindow.Category, src?: IDrawableJson, title?: string, action?: typeof this.__click);
-			constructor(parentOrSrc?: MenuWindow.Category | IDrawableJson, srcOrTitle?, titleOrAction?, action?) {
+			constructor(...args: Parameters<ItemOverloadDirect> | Parameters<ItemOverloadWithParent>) {
 				if (isAndroid()) {
 					this.resetContent();
 				}
-				if (parentOrSrc instanceof MenuWindow.Category) {
+				if (args[0] instanceof MenuWindow.Category) {
+					const [parentOrSrc, srcOrTitle, titleOrAction, action] = args as Parameters<ItemOverloadWithParent>;
 					this.setParentCategory(parentOrSrc);
 					srcOrTitle && this.setImage(srcOrTitle);
 					titleOrAction && this.setTitle(titleOrAction);
 					action && this.setOnClickListener(action);
 				} else {
+					const [parentOrSrc, srcOrTitle, titleOrAction] = args as Parameters<ItemOverloadDirect>;
 					parentOrSrc && this.setImage(parentOrSrc);
 					srcOrTitle && this.setTitle(srcOrTitle);
 					titleOrAction && this.setOnClickListener(titleOrAction);
 				}
 				this.setBackground("popup");
 			}
+
 			resetContent() {
 				let views = this.views = {} as typeof this.views;
 
@@ -1704,3 +1712,5 @@ namespace MenuWindow {
 
 	export type Elements = Header | ProjectHeader | Category | Message;
 }
+
+new MenuWindow.Category.Item()
