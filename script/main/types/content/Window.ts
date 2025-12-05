@@ -6,13 +6,13 @@ interface IFocusableWindow<ABC = IFocusableWindow<any>> {
 	height?: CallableJsonProperty1<ABC, number>;
 	x?: CallableJsonProperty1<ABC, number>;
 	y?: CallableJsonProperty1<ABC, number>;
-	content?: CallableJsonProperty1<ABC, Nullable<android.view.ViewGroup>>;
-	fragment?: CallableJsonProperty1<ABC, Nullable<IBaseFragment>>;
-	onAttach?: Nullable<(self: ABC) => void>;
-	onUpdate?: Nullable<(self: ABC, ...args: any) => void>;
-	onDismiss?: Nullable<(self: ABC) => void>;
-	enterTransition?: CallableJsonProperty1<ABC, Nullable<android.transition.Transition>>;
-	exitTransition?: CallableJsonProperty1<ABC, Nullable<android.transition.Transition>>;
+	content?: CallableJsonProperty1<ABC, android.view.View>;
+	fragment?: CallableJsonProperty1<ABC, IBaseFragment>;
+	onAttach?: (self: ABC) => void;
+	onUpdate?: (self: ABC, ...args: any) => void;
+	onDismiss?: (self: ABC) => void;
+	enterTransition?: CallableJsonProperty1<ABC, android.transition.Transition>;
+	exitTransition?: CallableJsonProperty1<ABC, android.transition.Transition>;
 }
 
 type IFocusableWindowWithType = IFocusableWindow & {
@@ -23,7 +23,7 @@ type IFocusableWindowWithType = IFocusableWindow & {
  * @deprecated EXTREMELLY UNSTABLE
  */
 interface IUniqueWindow<ABC = IUniqueWindow<any>> extends IFocusableWindow<ABC> {
-	id?: CallableJsonProperty1<ABC, Nullable<string>>;
+	id?: CallableJsonProperty1<ABC, string>;
 	updatable?: CallableJsonProperty1<ABC, boolean>;
 }
 
@@ -32,7 +32,7 @@ type IUniqueWindowWithType = IUniqueWindow & {
 };
 
 interface IFocusablePopup<ABC = IFocusablePopup<any>> extends IFocusableWindow<ABC> {
-	id?: CallableJsonProperty1<ABC, Nullable<string>>;
+	id?: CallableJsonProperty1<ABC, string>;
 	mayDismissed?: CallableJsonProperty1<ABC, boolean>;
 	elements?: CallableJsonProperty1<ABC, CallableJsonProperty2<ABC, object, IBaseFragment> | CallableJsonProperty2<ABC, object, IBaseFragment>[]>;
 }
@@ -42,7 +42,7 @@ type IFocusablePopupWithType = IFocusablePopup & {
 };
 
 interface IExpandablePopup<ABC = IExpandablePopup<any>> extends IFocusablePopup<ABC> {
-	title?: CallableJsonProperty1<ABC, Nullable<string>>;
+	title?: CallableJsonProperty1<ABC, string>;
 	mayCollapsed?: CallableJsonProperty1<ABC, boolean>;
 	mayDragged?: CallableJsonProperty1<ABC, boolean>;
 	expanded?: CallableJsonProperty1<ABC, boolean>;

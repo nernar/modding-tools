@@ -1,6 +1,6 @@
 class MenuTool extends InteractionTool {
 	menuDescriptor: CallableJsonProperty1<MenuWindow, IMenuWindow>;
-	protected menuWindow: Nullable<MenuWindow>;
+	protected menuWindow: MenuWindow;
 
 	constructor(object?: Partial<MenuTool>) {
 		super(object);

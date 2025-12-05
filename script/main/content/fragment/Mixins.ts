@@ -1,13 +1,13 @@
 interface ITextFragment {
 	getTextView(): android.widget.TextView;
-	getText(): Nullable<string>;
+	getText(): string;
 	append(text: string): this;
 	setText(text: string): this;
 }
 
 abstract class TextFragmentMixin extends BaseFragment implements ITextFragment {
 	abstract getTextView(): android.widget.TextView;
-	private text: Nullable<string>;
+	private text?: string;
 	/**
 	 * @requires `isCLI()`
 	 */
@@ -42,7 +42,7 @@ abstract class TextFragmentMixin extends BaseFragment implements ITextFragment {
 }
 
 namespace TextFragmentMixin {
-	export function parseJson(instanceOrJson, json?) {
+	export function parseJson(instanceOrJson: TextFragmentMixin, json?: ITextFragmentMixin) {
 		if (json.hasOwnProperty("text")) {
 			instanceOrJson.setText(calloutOrParse(json, json.text, [this, instanceOrJson]));
 		}
@@ -52,11 +52,9 @@ namespace TextFragmentMixin {
 	}
 }
 
-/**
- * @deprecated Use {@link TextFragmentMixin} instead.
- */
 interface ITextFragmentMixin<ABC = ITextFragmentMixin<any>> extends IBaseFragment<ABC> {
-	text?: CallableJsonProperty1<ABC, Nullable<string>>;
+	text?: CallableJsonProperty1<ABC, string>;
+	append?: CallableJsonProperty1<ABC, string>;
 }
 
 /**
@@ -66,13 +64,13 @@ const TextFragment = TextFragmentMixin;
 
 interface IImageFragment {
 	getImageView(): android.widget.ImageView;
-	getImage(): Nullable<any>;
-	setImage(src: Nullable<any>): this;
+	getImage(): any;
+	setImage(src: IDrawableJson): this;
 }
 
 abstract class ImageFragmentMixin extends BaseFragment implements IImageFragment {
 	abstract getImageView(): android.widget.ImageView;
-	private image: Nullable<any>;
+	private image?: IDrawableJson;
 	/**
 	 * @requires `isCLI()`
 	 */
@@ -91,7 +89,7 @@ abstract class ImageFragmentMixin extends BaseFragment implements IImageFragment
 	getImage() {
 		return this.image || null;
 	}
-	setImage(src) {
+	setImage(src: IDrawableJson) {
 		if (isAndroid()) {
 			let image = this.getImageView();
 			if (!(src instanceof Drawable)) {
@@ -106,18 +104,15 @@ abstract class ImageFragmentMixin extends BaseFragment implements IImageFragment
 }
 
 namespace ImageFragmentMixin {
-	export function parseJson(instanceOrJson, json?) {
+	export function parseJson(instanceOrJson: ImageFragmentMixin, json?: IImageFragmentMixin) {
 		if (json.hasOwnProperty("icon")) {
 			instanceOrJson.setImage(calloutOrParse(json, json.icon, [this, instanceOrJson]));
 		}
 	}
 }
 
-/**
- * @deprecated Use {@link ImageFragmentMixin} instead.
- */
 interface IImageFragmentMixin<ABC = IImageFragmentMixin<any>> extends IBaseFragment<ABC> {
-	icon?: CallableJsonProperty1<ABC, Nullable<IDrawableJson>>;
+	icon?: CallableJsonProperty1<ABC, IDrawableJson>;
 }
 
 /**
@@ -126,11 +121,11 @@ interface IImageFragmentMixin<ABC = IImageFragmentMixin<any>> extends IBaseFragm
 const ImageFragment = ImageFragmentMixin;
 
 abstract class SelectableFragment extends BaseFragment {
-	selectionType: any;
+	protected selectionType?: number;
 	getSelectionType() {
 		return this.selectionType || SelectableFragment.SELECTION_LAYOUT;
 	}
-	setSelectionType(type) {
+	setSelectionType(type: number) {
 		if (type == null || this.getSelectionType() == type) {
 			return;
 		}
@@ -161,7 +156,7 @@ abstract class SelectableFragment extends BaseFragment {
 		this.updateSelection();
 		return true;
 	}
-	setOnSelectListener(listener) {
+	setOnSelectListener(listener: typeof this.onSelect) {
 		if (listener != null) {
 			this.onSelect = listener;
 		} else {
@@ -185,7 +180,7 @@ abstract class SelectableFragment extends BaseFragment {
 		this.updateSelection();
 		return true;
 	}
-	setOnUnselectListener(listener) {
+	setOnUnselectListener(listener: typeof this.onUnselect) {
 		if (listener != null) {
 			this.onUnselect = listener;
 		} else {
@@ -200,12 +195,12 @@ abstract class SelectableFragment extends BaseFragment {
 		return this.select();
 	}
 
-	private selectedBackground: Nullable<any>;
-	private unselectedBackground: Nullable<any>;
+	private selectedBackground: IDrawableJson;
+	private unselectedBackground: IDrawableJson;
 	getSelectedBackground() {
 		return this.selectedBackground || null;
 	}
-	setSelectedBackground(src) {
+	setSelectedBackground(src: IDrawableJson) {
 		this.selectedBackground = src;
 		this.selected && this.updateSelection();
 		return this;
@@ -213,7 +208,7 @@ abstract class SelectableFragment extends BaseFragment {
 	getUnselectedBackground() {
 		return this.unselectedBackground || null;
 	}
-	setUnselectedBackground(src) {
+	setUnselectedBackground(src: IDrawableJson) {
 		this.unselectedBackground = src;
 		this.selected || this.updateSelection();
 		return this;
@@ -233,7 +228,7 @@ namespace SelectableFragment {
 	export const SELECTION_EXPLICIT = 1;
 	export const SELECTION_DENIED = 2;
 
-	export function parseJson(instanceOrJson, json?) {
+	export function parseJson(instanceOrJson: SelectableFragment, json?: ISelectableFragment) {
 		if (json.hasOwnProperty("selectionType")) {
 			instanceOrJson.setSelectionType(calloutOrParse(json, json.selectionType, [this, instanceOrJson]));
 		}
@@ -256,9 +251,9 @@ namespace SelectableFragment {
 }
 
 interface ISelectableFragment<ABC = ISelectableFragment<any>> {
-	selectionType?: CallableJsonProperty1<ABC, Nullable<number>>;
-	selectedBackground?: CallableJsonProperty1<ABC, Nullable<IDrawableJson>>;
-	unselectedBackground?: CallableJsonProperty1<ABC, Nullable<IDrawableJson>>;
+	selectionType?: CallableJsonProperty1<ABC, number>;
+	selectedBackground?: CallableJsonProperty1<ABC, IDrawableJson>;
+	unselectedBackground?: CallableJsonProperty1<ABC, IDrawableJson>;
 	selected?: CallableJsonProperty1<ABC, boolean>;
 	select?: (self: ABC) => any;
 	unselect?: (self: ABC) => any;
@@ -419,7 +414,7 @@ namespace SelectableLayoutFragment {
 	export const MODE_SINGLE = 1;
 	export const MODE_MULTIPLE = 2;
 
-	export function parseJson(instanceOrJson, json?) {
+	export function parseJson(instanceOrJson: SelectableLayoutFragment, json?: ISelectableLayoutFragment) {
 		if (json.hasOwnProperty("selectionMode")) {
 			instanceOrJson.setSelectionMode(calloutOrParse(json, json.selectionMode, [this, instanceOrJson]));
 		}
@@ -442,9 +437,9 @@ namespace SelectableLayoutFragment {
 }
 
 interface ISelectableLayoutFragment<ABC = ISelectableLayoutFragment<any>> {
-	selectionType?: CallableJsonProperty1<ABC, Nullable<number>>;
+	selectionMode?: CallableJsonProperty1<ABC, number>;
 	holdActivatesMultipleSelection?: CallableJsonProperty1<ABC, boolean>;
-	selectedItem?: CallableJsonProperty1<ABC, Nullable<IBaseFragment | number>>;
+	selectedItem?: CallableJsonProperty1<ABC, IBaseFragment | number>;
 	selectItem?: (self: ABC, item: ISelectableFragment, index: number) => void;
 	unselectItem?: (self: ABC, item: ISelectableFragment, index: number) => void;
 	holdItem?: (self: ABC, item: ISelectableFragment, index: number) => boolean;

@@ -1,7 +1,7 @@
 class Tool {
 	protected state: number = Tool.State.INACTIVE;
 	controlDescriptor: CallableJsonProperty1<ControlWindow, IControlWindow>;
-	protected controlWindow: Nullable<ControlWindow>;
+	protected controlWindow?: ControlWindow;
 
 	constructor(object?: Partial<Tool>) {
 		this.reset();
@@ -126,7 +126,7 @@ class Tool {
 		control.transformLogotype();
 		control.attach();
 	}
-	sequence(sequence?: Nullable<Sequence>) {
+	sequence(sequence?: Sequence) {
 		if (sequence instanceof Sequence) {
 			if (sequence.getThread() == null) {
 				if (sequence instanceof ControlSequence) {

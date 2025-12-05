@@ -1,11 +1,12 @@
 class ScriptConverter {
-	TYPE: string;
-	state = ScriptConverter.State.NOT_ATTACHED;
-	process?: (obj: Scriptable) => Nullable<string | string[]>;
-	attached: Nullable<Scriptable>;
-	throwable: Nullable<Error>;
-	thread: Nullable<java.lang.Thread>;
-	result: Nullable<string | string[]>;
+	readonly TYPE: string;
+	protected state = ScriptConverter.State.NOT_ATTACHED;
+	process?: (obj: Scriptable) => string | string[];
+	protected attached?: Scriptable;
+	protected throwable?: Error;
+	protected thread?: java.lang.Thread;
+	protected result?: string | string[];
+
 	constructor(type?: string, process?: typeof this.process) {
 		if (type !== undefined) {
 			this.TYPE = type;
@@ -129,7 +130,7 @@ class ScriptConverter {
 	resolvePrefix(suffix: string, obj: any[], i: number) {
 		return obj.length <= 1 ? suffix : suffix + (i + 1);
 	}
-	indent(what: Nullable<string>, symbol: string) {
+	indent(what: string, symbol: string) {
 		return what != null ? what.replace(/\n(?=[^\n])/g, "\n" + symbol) : null;
 	}
 }

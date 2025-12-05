@@ -1,6 +1,6 @@
 abstract class BaseFragment extends Fragment {
 	readonly TYPE: string = "BaseFragment";
-	constructor() {
+	constructor(...marks) {
 		super();
 		this.marks = [];
 		if (this.resetContainer != null && isAndroid()) {
@@ -15,8 +15,8 @@ abstract class BaseFragment extends Fragment {
 				// container.addView(view);
 			// }
 		}
-		if (arguments.length > 0) {
-			this.mark.apply(this, arguments);
+		if (marks.length > 0) {
+			this.mark.apply(this, marks);
 		} else {
 			this.remark();
 		}
@@ -26,7 +26,7 @@ abstract class BaseFragment extends Fragment {
 	getContainerRoot() {
 		return this.getContainer();
 	}
-	override setContainerView(view: Nullable<android.view.View>) {
+	override setContainerView(view: android.view.View) {
 		super.setContainerView(view);
 		isAndroid() && this.resetListeners();
 		return this;
@@ -55,14 +55,14 @@ abstract class BaseFragment extends Fragment {
 		});
 	}
 
-	private background: Nullable<Drawable>;
-	getBackground(tag?: Nullable<string>) {
+	private background?: Drawable;
+	getBackground(tag?: string) {
 		if (tag == null || tag.length == 0) {
 			return this.background || null;
 		}
 		return this[tag + "Background"] || null;
 	}
-	setBackground(src, tag?: Nullable<string>, layout?: Nullable<android.view.View>) {
+	setBackground(src: IDrawableJson, tag?: string, layout?: android.view.View) {
 		if (isAndroid()) {
 			if (layout == null) {
 				layout = this.getContainerRoot();
@@ -209,9 +209,9 @@ abstract class BaseFragment extends Fragment {
 }
 
 namespace BaseFragment {
-	export function parseJson(json: IBaseFragment): BaseFragment
-	export function parseJson(instance: BaseFragment, json: IBaseFragment): BaseFragment;
-	export function parseJson(instanceOrJson: BaseFragment | IBaseFragment, json?: IBaseFragment) {
+	export function parseJson<RT extends BaseFragment = BaseFragment, JT extends IBaseFragment = IBaseFragment>(json: JT): RT;
+	export function parseJson<RT extends BaseFragment = BaseFragment, JT extends IBaseFragment = IBaseFragment>(instance: RT, json: JT): RT;
+	export function parseJson<RT extends BaseFragment = BaseFragment, JT extends IBaseFragment = IBaseFragment>(instanceOrJson: RT | JT, json?: JT): RT {
 		if (!(instanceOrJson instanceof BaseFragment)) {
 			MCSystem.throwException("BaseFragment.parseJson is callable only with non-abstract instances!");
 		}
@@ -257,17 +257,17 @@ namespace BaseFragment {
 }
 
 interface IBaseFragment<ABC = IBaseFragment<any>> {
-	type?: Nullable<string>;
+	type?: string;
 	attach?: (parent: Fragment | FocusableWindow) => void;
 	deattach?: () => void;
 	update?: (...args: any) => void;
-	token?: CallableJsonProperty1<ABC, Nullable<string>>;
+	token?: CallableJsonProperty1<ABC, string>;
 	selectable?: CallableJsonProperty1<ABC, boolean>;
 	hoverable?: CallableJsonProperty1<ABC, boolean>;
 	visible?: CallableJsonProperty1<ABC, boolean>;
-	mark?: CallableJsonProperty1<ABC, Nullable<string>>;
-	marks?: CallableJsonProperty1<ABC, Nullable<string | string[]>>;
-	background?: CallableJsonProperty1<ABC, Nullable<IDrawableJson>>;
+	mark?: CallableJsonProperty1<ABC, string>;
+	marks?: CallableJsonProperty1<ABC, string | string[]>;
+	background?: CallableJsonProperty1<ABC, IDrawableJson>;
 	click?: () => void;
 	hold?: () => boolean | void;
 }

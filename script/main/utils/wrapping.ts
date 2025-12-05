@@ -149,7 +149,7 @@ const Wrappables = [
 	Dirs.EVALUATE
 ];
 
-function findWrappedScript(path: string): Nullable<string> {
+function findWrappedScript(path: string): string {
 	let offset = 0;
 	let filename = path;
 	do {

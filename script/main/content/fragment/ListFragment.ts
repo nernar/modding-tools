@@ -42,7 +42,7 @@ class ListFragment extends BaseFragment {
 	getListView() {
 		return this.getContainer() as android.widget.ListView;
 	}
-	private holderAdapter: Nullable<ListHolderAdapter>;
+	private holderAdapter?: ListHolderAdapter;
 	getListAdapter() {
 		if (this.holderAdapter == null) {
 			let adapter = new ListHolderAdapter();
@@ -51,7 +51,7 @@ class ListFragment extends BaseFragment {
 		}
 		return this.holderAdapter;
 	}
-	setItems(items: Nullable<any[]>) {
+	setItems(items: any[]) {
 		let adapter = this.getListAdapter();
 		if (adapter == null) {
 			return false;

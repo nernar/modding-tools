@@ -1,6 +1,6 @@
 class EditorTool extends SidebarTool {
-	worker: Nullable<Worker>;
-	explorerLastName: Nullable<string>;
+	protected worker?: Worker;
+	protected explorerLastName?: string;
 
 	constructor(object?: Partial<EditorTool>) {
 		super(object);

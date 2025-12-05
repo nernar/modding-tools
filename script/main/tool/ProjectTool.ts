@@ -1,7 +1,7 @@
 class ProjectTool extends MenuTool {
 	contentProjectDescriptor: MenuWindow.IProjectHeader["categories"];
 	contentEntryDescriptor: MenuWindow.ICategory["items"];
-	private explorerLastName: Nullable<string>;
+	private explorerLastName?: string;
 	static launchDependencies: boolean;
 	static instantLaunchDependencies: boolean;
 
@@ -250,9 +250,9 @@ namespace ProjectTool {
 		EXPORT = 2
 	}
 	export class MenuFactory {
-		private projectType: Nullable<string>;
+		private projectType: string;
 
-		constructor(object?: Partial<MenuFactory>, projectType?: Nullable<string>) {
+		constructor(object?: Partial<MenuFactory>, projectType?: string) {
 			if (object && typeof object == "object") {
 				merge(this, object);
 			}

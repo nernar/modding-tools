@@ -3,8 +3,8 @@
  * All this will be removed as soon as possible.
  */
 namespace ProjectProvider {
-	export let thread: Nullable<java.lang.Thread>; 
-	export let opened: Nullable<Project>;
+	export let thread: java.lang.Thread; 
+	export let opened: Project;
 	export function getProject() {
 		return ProjectProvider.opened || null;
 	}

@@ -49,10 +49,10 @@ function selectProjectData<T extends Scriptable>(
  * @requires `isAndroid()`
  */
 function confirm(
-	title: Nullable<string>,
-	message: Nullable<string>,
+	title: string,
+	message: string,
 	complete?: () => void,
-	confirmation?: Nullable<string>
+	confirmation?: string
 ) {
 	handle(function() {
 		let builder = new android.app.AlertDialog.Builder(getContext(),
@@ -119,7 +119,7 @@ function willBeDeletedSoonSoYouShouldntUseIt() {
  * @requires `isAndroid()`
  */
 function select(
-	title: Nullable<string>,
+	title: string,
 	items: string[],
 	complete: (approved: boolean[], items: string | string[]) => void,
 	multiple?: boolean,
@@ -191,7 +191,7 @@ function selectFile(
 	extensions: string | string[],
 	complete: (file: java.io.File) => void,
 	accept?: () => boolean,
-	directory?: Nullable<java.io.File | string>
+	directory?: java.io.File | string
 ) {
 	handle(function() {
 		let explorer = new ExplorerWindow();
@@ -216,11 +216,11 @@ function selectFile(
  * @requires `isAndroid()`
  */
 function saveFile(
-	name: Nullable<string>,
+	name: string,
 	extensions: string | string[],
 	complete: (file: java.io.File, name: string) => void,
 	accept?: () => boolean,
-	directory?: Nullable<java.io.File | string>
+	directory?: java.io.File | string
 ) {
 	handle(function() {
 		let explorer = new ExplorerWindow();

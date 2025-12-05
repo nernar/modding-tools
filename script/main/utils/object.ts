@@ -91,7 +91,7 @@ function isEmpty(obj) {
 	return true;
 }
 
-function calloutOrParse<T>(scope: any, value: Nullable<T | ((...args: any) => T)>, args?: any | any[]): Nullable<T> {
+function calloutOrParse<T>(scope: any, value: T | ((...args: any) => T), args?: any | any[]): T {
 	try {
 		if (typeof value == "function") {
 			if (args === undefined) {
@@ -112,7 +112,7 @@ function calloutOrParse<T>(scope: any, value: Nullable<T | ((...args: any) => T)
 	return null;
 }
 
-function parseCallback<T>(scope: any, value: Nullable<((...args: any) => T)>, args?: any): () => T {
+function parseCallback<T>(scope: any, value: ((...args: any) => T), args?: any): () => T {
 	try {
 		if (args === undefined) {
 			args = [];

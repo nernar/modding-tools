@@ -1,12 +1,11 @@
 class ControlSequence<T extends any> extends Sequence {
-	window?: Nullable<ControlWindow>;
-	dismissWhenCancelled?: boolean;
-	inherited?: boolean;
+	protected window?: ControlWindow;
+	protected dismissWhenCancelled?: boolean;
+	protected inherited?: boolean;
 
 	constructor(obj?: T) {
 		super(obj);
 	}
-
 	getWindow() {
 		return this.window || null;
 	}

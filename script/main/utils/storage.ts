@@ -8,7 +8,7 @@ interface StringifyObjectEvent {
 	onPassed?(obj: any, type: typeof obj): void;
 }
 
-function stringifyObject(obj: any, beautify?: boolean, callback?: Nullable<StringifyObjectEvent>) {
+function stringifyObject(obj: any, beautify?: boolean, callback?: StringifyObjectEvent) {
 	if (callback === undefined) {
 		callback = {};
 	}
@@ -120,10 +120,10 @@ function stringifyObject(obj: any, beautify?: boolean, callback?: Nullable<Strin
 	return recursiveStringify(obj, "", 0);
 }
 
-function readFile(path: string | java.io.File, asBytes: true, action?: Nullable<(bytes: native.Array<number>) => void>): void;
-function readFile(path: string | java.io.File, asBytes: false, action?: Nullable<(text: string) => void>): void;
+function readFile(path: string | java.io.File, asBytes: true, action?: (bytes: native.Array<number>) => void): void;
+function readFile(path: string | java.io.File, asBytes: false, action?: (text: string) => void): void;
 
-function readFile(path: string | java.io.File, asBytes?: boolean, action?: Nullable<(content: any) => void>) {
+function readFile(path: string | java.io.File, asBytes?: boolean, action?: (content: any) => void) {
 	handleThread(function() {
 		let file = Files.of(path);
 		if (!file.exists()) return;
@@ -140,7 +140,7 @@ function recursiveIndexateWithExport(path: string | java.io.File, what: Scriptab
 
 	let done = false;
 
-	function recursiveIndexate(object: any, count?: number, tree?: Nullable<string>) {
+	function recursiveIndexate(object: any, count?: number, tree?: string) {
 		if (count === undefined) {
 			count = 0;
 		}
@@ -228,7 +228,7 @@ function compileData(text: string, type?: string, additional?: Scriptable): any 
 		type == "object" ? scope.result : null;
 }
 
-function formatExceptionReport(error: Nullable<Scriptable>, upper?: boolean): string {
+function formatExceptionReport(error: Scriptable, upper?: boolean): string {
 	let report = localizeError(error),
 		point = report.charAt(report.length - 1);
 	if (!/\.|\!|\?/.test(point)) report += ".";
@@ -241,7 +241,7 @@ function formatExceptionReport(error: Nullable<Scriptable>, upper?: boolean): st
 	return char + report.substring(1);
 }
 
-function importProject(path: string | java.io.File, action?: Nullable<(data: object | object[]) => void>) {
+function importProject(path: string | java.io.File, action?: (data: object | object[]) => void) {
 	readFile(path, true, function(bytes) {
 		let result = decompileFromProduce(bytes),
 			data = compileData(result, "object");
@@ -265,7 +265,7 @@ function importProject(path: string | java.io.File, action?: Nullable<(data: obj
 	});
 }
 
-function findBuildConfigLocation(path: string | java.io.File): Nullable<java.io.File> {
+function findBuildConfigLocation(path: string | java.io.File): java.io.File {
 	try {
 		let file = Files.of(path);
 		do {
@@ -279,7 +279,7 @@ function findBuildConfigLocation(path: string | java.io.File): Nullable<java.io.
 	return null;
 }
 
-function findSourceInBuildConfigLocation(buildConfig: any, path: string): Nullable<string> {
+function findSourceInBuildConfigLocation(buildConfig: any, path: string): string {
 	 let highestPath = null;
 	 let sourcePath = null;
 	 for (let i = 0; i < buildConfig.buildDirs.length; i++) {

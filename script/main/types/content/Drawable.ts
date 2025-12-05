@@ -5,22 +5,22 @@ interface IDrawable<ABC = IDrawable<any>> {
 	interpolation?: CallableJsonProperty1<ABC, boolean>;
 	tint?: CallableJsonProperty1<ABC, string | number>;
 	mipmap?: CallableJsonProperty1<ABC, boolean>;
-	filter?: CallableJsonProperty1<ABC, Nullable<android.graphics.ColorFilter>>;
+	filter?: CallableJsonProperty1<ABC, android.graphics.ColorFilter>;
 	tile?: CallableJsonProperty1<ABC, android.graphics.Shader.TileMode | [android.graphics.Shader.TileMode, android.graphics.Shader.TileMode]>;
 	gravity?: CallableJsonProperty1<ABC, number>;
 	direction?: CallableJsonProperty1<ABC, number>;
-	xfermode?: CallableJsonProperty1<ABC, Nullable<android.graphics.Xfermode>>;
+	xfermode?: CallableJsonProperty1<ABC, android.graphics.Xfermode>;
 	level?: CallableJsonProperty1<ABC, number>;
 	state?: CallableJsonProperty1<ABC, number | number[]>;
 	visible?: CallableJsonProperty1<ABC, boolean | [boolean, boolean]>;
 }
 
 interface ILayerDrawable<ABC = ILayerDrawable<any>> extends IDrawable<ABC> {
-	layers?: CallableJsonProperty1<ABC, Nullable<IDrawableJson | IDrawableJson[]>>;
+	layers?: CallableJsonProperty1<ABC, IDrawableJson | IDrawableJson[]>;
 }
 
 interface IClipDrawable<ABC = IClipDrawable<any>> extends IDrawable<ABC> {
-	drawable?: CallableJsonProperty1<ABC, Nullable<IDrawableJson>>;
+	drawable?: CallableJsonProperty1<ABC, IDrawableJson>;
 	location?: CallableJsonProperty1<ABC, number>;
 	side?: CallableJsonProperty1<ABC, string | number>;
 }
@@ -30,7 +30,7 @@ interface IColorDrawable<ABC = IColorDrawable<any>> extends IDrawable<ABC> {
 }
 
 interface IBitmapDrawable<ABC = IBitmapDrawable<any>> extends IDrawable<ABC> {
-	bitmap?: CallableJsonProperty1<ABC, Nullable<android.graphics.Bitmap | string>>;
+	bitmap?: CallableJsonProperty1<ABC, android.graphics.Bitmap | string>;
 	options?: CallableJsonProperty1<ABC, android.graphics.Bitmap.Config>;
 	corrupted?: CallableJsonProperty1<ABC, android.graphics.Bitmap | string>;
 }
@@ -40,7 +40,7 @@ type IAnimationDrawableFrame<ABC = IAnimationDrawable> = IDrawable<ABC> | {
 };
 
 interface IAnimationDrawable<ABC = IAnimationDrawable<any>> extends IDrawable<ABC> {
-	frames?: CallableJsonProperty1<ABC, Nullable<IAnimationDrawableFrame | IAnimationDrawableFrame[]>>;
+	frames?: CallableJsonProperty1<ABC, IAnimationDrawableFrame | IAnimationDrawableFrame[]>;
 	duration?: CallableJsonProperty1<ABC, number>;
 	startingWhenProcess?: CallableJsonProperty1<ABC, boolean>;
 	stoppingWhenCompleted?: CallableJsonProperty1<ABC, boolean>;

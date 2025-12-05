@@ -1,7 +1,7 @@
 class Fragment {
 	readonly TYPE: string;
 	protected views: { [key: string]: android.view.View };
-	protected container: android.view.ViewGroup;
+	protected container?: android.view.View;
 
 	constructor() {
 		this.views = {};
@@ -10,9 +10,9 @@ class Fragment {
 	getContainer() {
 		return this.container || null;
 	}
-	setContainerView(view: android.view.ViewGroup) {
-		if (!(view instanceof android.view.ViewGroup)) {
-			MCSystem.throwException("Modding Tools: Fragment.setContainerView accepts only instances of ViewGroup, but got: " + view + "!");
+	setContainerView(view: android.view.View) {
+		if (!(view instanceof android.view.View)) {
+			MCSystem.throwException("Modding Tools: Fragment.setContainerView accepts only instances of View, but got: " + view + "!");
 		}
 		this.container = view;
 		return this;
@@ -47,7 +47,7 @@ class Fragment {
 		return byKey;
 	}
 
-	protected parent: Nullable<Fragment | FocusableWindow>;
+	protected parent?: Fragment | FocusableWindow;
 	getParent() {
 		return this.parent || null;
 	}
@@ -66,7 +66,7 @@ class Fragment {
 		return fragment;
 	}
 
-	protected token: Nullable<string>;
+	protected token?: string;
 	getToken() {
 		return this.token || null;
 	}
