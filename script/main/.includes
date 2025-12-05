@@ -43,14 +43,14 @@ content/popup/ExpandablePopup.ts
 
 layout/AdditionalMessage.ts
 layout/HintAlert.ts
-layout/ExplorerWindow.js
-layout/EditorFragment.js
+layout/ExplorerWindow.ts
+layout/EditorFragment.ts
 layout/control/OverlayFragment.ts
 layout/control/OverlayWindow.ts
 layout/control/ControlFragment.ts
 layout/control/ControlWindow.ts
 layout/menu/MenuWindow.ts
-layout/sidebar/SidebarFragment.js
+layout/sidebar/SidebarFragment.ts
 layout/sidebar/SidebarWindow.ts
 
 layout/fragment/CategoryTitleFragment.ts

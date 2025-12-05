@@ -84,8 +84,8 @@ abstract class LayoutFragment extends BaseFragment {
 		}
 		return null;
 	}
-	obtain = (function() {
-		let obtain = function(on, what, when) {
+	obtain = (() => {
+		let obtain = (on, what, when) => {
 			if (typeof when != "function" || when(on)) {
 				what(on);
 			}
@@ -96,9 +96,7 @@ abstract class LayoutFragment extends BaseFragment {
 				}
 			}
 		};
-		return function(what, when) {
-			obtain(this, what, when);
-		};
+		return (what, when) => obtain(this, what, when);
 	})();
 	updateLayout() {
 		return BaseFragment.prototype.update.apply(this, arguments);

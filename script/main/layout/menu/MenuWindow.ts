@@ -6,6 +6,7 @@
 class MenuWindow extends UniqueWindow {
 	override readonly TYPE: string = "MenuWindow";
 	views: {
+		files: any;
 		layout: android.widget.LinearLayout,
 		scroll: android.widget.ScrollView,
 	};
