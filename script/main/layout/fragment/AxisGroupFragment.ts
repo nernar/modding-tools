@@ -1,10 +1,13 @@
 class AxisGroupFragment extends LayoutFragment {
-	TYPE = "AxisGroupFragment";
+	override readonly TYPE: string = "AxisGroupFragment";
+	protected onChangeItem?: (item: any, index: number, value: number, difference: number) => void;
+	protected onResetItem?: (item: any, index: number, value: number) => void | number;
+
 	constructor(...marks) {
 		super(...marks);
 		this.setBackground("popup");
 	}
-	resetContainer() {
+	override resetContainer() {
 		let content = new android.widget.LinearLayout(getContext());
 		content.setPadding(toComplexUnitDip(6), toComplexUnitDip(6),
 			toComplexUnitDip(6), toComplexUnitDip(6));
@@ -26,35 +29,35 @@ class AxisGroupFragment extends LayoutFragment {
 		container.setTag("containerGroup");
 		content.addView(container);
 	}
-	getContainerRoot() {
-		return this.findViewByTag("containerGroup");
+	override getContainerRoot() {
+		return this.findViewByTag("containerGroup") as android.view.ViewGroup;
 	}
-	getContainerLayout() {
+	override getContainerLayout() {
 		return this.getContainerRoot();
 	}
 	getTextView() {
-		return this.findViewByTag("groupAxis");
+		return this.findViewByTag("groupAxis") as android.widget.TextView;
 	}
 	getAxis() {
 		return TextFragment.prototype.getText.apply(this, arguments);
 	}
-	appendAxis(text) {
-		return TextFragment.prototype.appendText.apply(this, arguments);
+	appendAxis(text: string) {
+		return TextFragment.prototype.append.apply(this, arguments);
 	}
-	setAxis(text) {
+	setAxis(text: string) {
 		return TextFragment.prototype.setText.apply(this, arguments);
 	}
-	changeItemInLayout(item, value, difference) {
+	changeItemInLayout(item, value: number, difference: number) {
 		this.onChangeItem && this.onChangeItem(item, item.getIndex(), value, difference);
 	}
-	resetItemInLayout(item, value) {
+	resetItemInLayout(item, value: number): number {
 		if (this.onResetItem) {
 			let result = this.onResetItem(item, item.getIndex(), value);
 			return result != null && typeof result == "number" ? result : null;
 		}
 		return null;
 	}
-	setOnChangeItemListener(listener) {
+	setOnChangeItemListener(listener: typeof this.onChangeItem) {
 		if (typeof listener == "function") {
 			this.onChangeItem = listener;
 		} else {
@@ -62,7 +65,7 @@ class AxisGroupFragment extends LayoutFragment {
 		}
 		return this;
 	}
-	setOnResetItemListener(listener) {
+	setOnResetItemListener(listener: typeof this.onResetItem) {
 		if (typeof listener == "function") {
 			this.onResetItem = listener;
 		} else {
@@ -70,12 +73,17 @@ class AxisGroupFragment extends LayoutFragment {
 		}
 		return this;
 	}
-	static parseJson(instanceOrJson, json, preferredFragment) {
+}
+
+namespace AxisGroupFragment {
+	export function parseJson<RT extends AxisGroupFragment = AxisGroupFragment, JT extends IAxisGroupFragment = IAxisGroupFragment>(json?: JT): RT;
+	export function parseJson<RT extends AxisGroupFragment = AxisGroupFragment, JT extends IAxisGroupFragment = IAxisGroupFragment>(instance: RT, json?: JT, preferredFragment?: string): RT;
+	export function parseJson<RT extends AxisGroupFragment = AxisGroupFragment, JT extends IAxisGroupFragment = IAxisGroupFragment>(instanceOrJson: RT | JT, json?: JT, preferredFragment?: string) {
 		if (!(instanceOrJson instanceof AxisGroupFragment)) {
 			json = instanceOrJson;
-			instanceOrJson = new AxisGroupFragment();
+			instanceOrJson = new AxisGroupFragment() as RT;
 		}
-		instanceOrJson = LayoutFragment.parseJson.call(this, instanceOrJson, json, preferredFragment !== undefined ? preferredFragment : "slider");
+		instanceOrJson = LayoutFragment.parseJson.call(this, instanceOrJson, json, preferredFragment !== undefined ? preferredFragment : "slider") as RT;
 		json = calloutOrParse(this, json, instanceOrJson);
 		if (json === null || typeof json != "object") {
 			return instanceOrJson;

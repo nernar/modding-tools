@@ -1,12 +1,19 @@
 class SliderFragment extends TextFragment {
-	TYPE = "SliderFragment";
+	override readonly TYPE: string = "SliderFragment";
+	protected modifier: number;
+	protected modifiers: number[];
+	protected value?: number;
+	protected suffix?: string;
+	protected onChange?: (value: number, difference: number) => void;
+	protected onReset?: (value: number) => void | number | boolean;
+
 	constructor(...marks) {
 		super(...marks);
 		this.modifier = 0;
 		this.modifiers = [16, 1];
 		this.setValue(0);
 	}
-	resetContainer() {
+	override resetContainer() {
 		let view = new android.widget.TextView(getContext());
 		view.setPadding(toComplexUnitDip(16), toComplexUnitDip(8),
 			toComplexUnitDip(16), toComplexUnitDip(8));
@@ -15,7 +22,7 @@ class SliderFragment extends TextFragment {
 		let currently = 0;
 		let previous = 0;
 		let moved = false;
-		view.setOnTouchListener((view, event) => {
+		view.setOnTouchListener(((view, event) => {
 			if (event.getAction() == android.view.MotionEvent.ACTION_DOWN) {
 				x = event.getX();
 				y = event.getY();
@@ -56,7 +63,7 @@ class SliderFragment extends TextFragment {
 			}
 			view.getParent().requestDisallowInterceptTouchEvent(true);
 			return true;
-		});
+		}) as any);
 		view.setTextSize(toComplexUnitDp(8));
 		view.setGravity($.Gravity.CENTER);
 		view.setTextColor($.Color.WHITE);
@@ -66,13 +73,13 @@ class SliderFragment extends TextFragment {
 		);
 		this.setContainerView(view);
 	}
-	getTextView() {
-		return this.getContainer();
+	override getTextView() {
+		return this.getContainer() as android.widget.TextView;
 	}
 	getValue() {
 		return this.value || 0;
 	}
-	setValue(value) {
+	setValue(value: number) {
 		value = value - 0;
 		if (isNaN(value)) {
 			Logger.Log("Modding Tools: Passed NaN to SliderFragment.setValue(*), it may be string or number", "WARNING");
@@ -82,7 +89,7 @@ class SliderFragment extends TextFragment {
 		this.updateCounter();
 		return true;
 	}
-	setSuffix(suffix) {
+	setSuffix(suffix: string) {
 		if (suffix != null) {
 			this.suffix = "" + suffix;
 		} else {
@@ -91,7 +98,7 @@ class SliderFragment extends TextFragment {
 		this.updateCounter();
 		return this;
 	}
-	setModifier(modifier) {
+	setModifier(modifier: number) {
 		this.modifier = modifier - 0;
 		if (this.modifier < 0) {
 			this.modifier = 0;
@@ -102,7 +109,7 @@ class SliderFragment extends TextFragment {
 		this.updateCounter();
 		return this;
 	}
-	setModifiers(modifiers) {
+	setModifiers(modifiers: number[]) {
 		if (!Array.isArray(modifiers) || modifiers.length == 0) {
 			Logger.Log("Modding Tools: SliderFragment.setModifiers(*) in incorrect format, please consider that it must be [..]", "WARNING");
 			return this;
@@ -119,7 +126,7 @@ class SliderFragment extends TextFragment {
 				preround(this.value / current) + " * " + (-current)) + (this.suffix || ""));
 		return this;
 	}
-	change(value, previous) {
+	change(value: number, previous?: number) {
 		previous == null && (previous = this.value);
 		if (this.setValue(value)) {
 			let parent = this.getParent();
@@ -129,17 +136,17 @@ class SliderFragment extends TextFragment {
 	}
 	reset() {
 		let value = this.onReset && this.onReset(this.value);
-		if (value != true && (value == null || isNaN(value))) {
+		if (value != true && (value == null || isNaN(value as number))) {
 			let parent = this.getParent();
 			value = parent && parent.resetItemInLayout && parent.resetItemInLayout(this, value);
 		}
-		if (value != true && (value == null || isNaN(value))) {
+		if (value != true && (value == null || isNaN(value as number))) {
 			return false;
 		}
-		value == true || this.change(value);
+		value == true || this.change(value as number);
 		return true;
 	}
-	setOnChangeListener(listener) {
+	setOnChangeListener(listener: typeof this.onChange) {
 		if (typeof listener == "function") {
 			this.onChange = listener;
 		} else {
@@ -147,7 +154,7 @@ class SliderFragment extends TextFragment {
 		}
 		return this;
 	}
-	setOnResetListener(listener) {
+	setOnResetListener(listener: typeof this.onReset) {
 		if (typeof listener == "function") {
 			this.onReset = listener;
 		} else {
@@ -155,16 +162,21 @@ class SliderFragment extends TextFragment {
 		}
 		return this;
 	}
-	static parseJson(instanceOrJson, json) {
+}
+
+namespace SliderFragment {
+	export function parseJson<RT extends SliderFragment = SliderFragment, JT extends ISliderFragment = ISliderFragment>(json?: JT): RT;
+	export function parseJson<RT extends SliderFragment = SliderFragment, JT extends ISliderFragment = ISliderFragment>(instance: RT, json?: JT): RT;
+	export function parseJson<RT extends SliderFragment = SliderFragment, JT extends ISliderFragment = ISliderFragment>(instanceOrJson: RT | JT, json?: JT) {
 		if (!(instanceOrJson instanceof SliderFragment)) {
 			json = instanceOrJson;
-			instanceOrJson = new SliderFragment();
+			instanceOrJson = new SliderFragment() as RT;
 		}
-		instanceOrJson = TextFragment.parseJson.call(this, instanceOrJson, json);
 		json = calloutOrParse(this, json, instanceOrJson);
 		if (json === null || typeof json != "object") {
 			return instanceOrJson;
 		}
+		TextFragmentMixin.parseJson.call(this, instanceOrJson, json);
 		if (json.hasOwnProperty("modifiers")) {
 			instanceOrJson.setModifiers(calloutOrParse(json, json.modifiers, [this, instanceOrJson]));
 		}

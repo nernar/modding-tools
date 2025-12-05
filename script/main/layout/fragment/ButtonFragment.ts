@@ -1,10 +1,10 @@
 class ButtonFragment extends TextFragment {
-	TYPE = "ButtonFragment";
+	override readonly TYPE: string = "ButtonFragment";
 	constructor(...marks) {
 		super(...marks);
 		this.setIsSelectable(true);
 	}
-	resetContainer() {
+	override resetContainer() {
 		let view = new android.widget.TextView(getContext());
 		view.setGravity($.Gravity.CENTER);
 		view.setTextColor($.Color.WHITE);
@@ -13,21 +13,21 @@ class ButtonFragment extends TextFragment {
 		this.setContainerView(view);
 		this.setSelectedBackground("popupSelectionSelected");
 	}
-	getTextView() {
-		return this.getContainer();
+	override getTextView() {
+		return this.getContainer() as android.widget.TextView;
 	}
-	click() {
+	override click() {
 		this.toggle();
-		TextFragment.prototype.click.apply(this, arguments);
+		super.click();
 	}
-	hold() {
+	override hold() {
 		let parent = this.getParent();
 		if (parent && parent.holdItemInLayout && parent.holdItemInLayout(this)) {
 			return true;
 		}
-		return TextFragment.prototype.hold.apply(this, arguments);
+		return super.hold();
 	}
-	remark() {
+	override remark() {
 		let text = this.getTextView();
 		if (this.hasMark("solid") || this.hasMark("popup")) {
 			text.setPadding(toComplexUnitDip(16), toComplexUnitDip(16),
@@ -46,18 +46,23 @@ class ButtonFragment extends TextFragment {
 		} else {
 			text.setTextSize(toComplexUnitDp(8));
 		}
-		TextFragment.prototype.remark.apply(this, arguments);
+		super.remark();
 	}
-	static parseJson(instanceOrJson, json) {
+}
+
+namespace ButtonFragment {
+	export function parseJson<RT extends ButtonFragment = ButtonFragment, JT extends IButtonFragment = IButtonFragment>(json?: JT): RT;
+	export function parseJson<RT extends ButtonFragment = ButtonFragment, JT extends IButtonFragment = IButtonFragment>(instance: RT, json?: JT): RT;
+	export function parseJson<RT extends ButtonFragment = ButtonFragment, JT extends IButtonFragment = IButtonFragment>(instanceOrJson: RT | JT, json?: JT) {
 		if (!(instanceOrJson instanceof ButtonFragment)) {
 			json = instanceOrJson;
-			instanceOrJson = new ButtonFragment();
+			instanceOrJson = new ButtonFragment() as RT;
 		}
-		instanceOrJson = TextFragment.parseJson.call(this, instanceOrJson, json);
 		json = calloutOrParse(this, json, instanceOrJson);
 		if (json === null || typeof json != "object") {
 			return instanceOrJson;
 		}
+		TextFragmentMixin.parseJson.call(this, instanceOrJson, json);
 		SelectableFragment.parseJson.call(this, instanceOrJson, json);
 		return instanceOrJson;
 	}

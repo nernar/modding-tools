@@ -1,6 +1,6 @@
 class CounterFragment extends SliderFragment {
-	TYPE = "CounterFragment";
-	resetContainer() {
+	override readonly TYPE: string = "CounterFragment";
+	override resetContainer() {
 		SliderFragment.prototype.resetContainer.apply(this, arguments);
 		let modifier = this.getContainer();
 
@@ -12,21 +12,21 @@ class CounterFragment extends SliderFragment {
 
 		let subtract = new android.widget.ImageView(getContext());
 		new BitmapDrawable("controlAdapterMinus").attachAsImage(subtract);
-		subtract.setOnClickListener(() => {
+		subtract.setOnClickListener((() => {
 			try {
 				let previous = this.value, current = this.modifiers[this.modifier];
 				this.change(this.value - (current > 0 ? 1 / current : current), previous);
 			} catch (e) {
 				reportError(e);
 			}
-		});
+		}) as any);
 		subtract.setTag("counterSubtract");
 		let params = new android.widget.LinearLayout.
 			LayoutParams(toComplexUnitDip(40), toComplexUnitDip(40));
 		content.addView(subtract, params);
 
 		modifier.setPadding(toComplexUnitDip(8), 0, toComplexUnitDip(8), 0);
-		modifier.setOnClickListener(() => {
+		modifier.setOnClickListener((() => {
 			try {
 				this.modifier++;
 				this.modifier == this.modifiers.length && (this.modifier = 0);
@@ -34,34 +34,34 @@ class CounterFragment extends SliderFragment {
 			} catch (e) {
 				reportError(e);
 			}
-		});
-		modifier.setOnLongClickListener(() => {
+		}) as any);
+		modifier.setOnLongClickListener((() => {
 			try {
 				return !!(this.reset && this.reset());
 			} catch (e) {
 				reportError(e);
 			}
 			return false;
-		});
+		}) as any);
 		modifier.setTag("counterText");
 		content.addView(modifier, new android.widget.LinearLayout.
 			LayoutParams(toComplexUnitDip(104), $.ViewGroup.LayoutParams.MATCH_PARENT));
 
 		let add = new android.widget.ImageView(getContext());
 		new BitmapDrawable("controlAdapterPlus").attachAsImage(add);
-		add.setOnClickListener(() => {
+		add.setOnClickListener((() => {
 			try {
 				let previous = this.value, current = this.modifiers[this.modifier];
 				this.change(this.value + (current > 0 ? 1 / current : current), previous);
 			} catch (e) {
 				reportError(e);
 			}
-		});
+		}) as any);
 		add.setTag("counterAdd");
 		content.addView(add, params);
 	}
-	getTextView() {
-		return this.findViewByTag("counterText");
+	override getTextView() {
+		return this.findViewByTag("counterText") as android.widget.TextView;
 	}
 	getSubtractView() {
 		return this.findViewByTag("counterSubtract");
@@ -69,10 +69,15 @@ class CounterFragment extends SliderFragment {
 	getAddView() {
 		return this.findViewByTag("counterAdd");
 	}
-	static parseJson(instanceOrJson, json) {
+}
+
+namespace CounterFragment {
+	export function parseJson<RT extends CounterFragment = CounterFragment, JT extends ISliderFragment = ISliderFragment>(json?: JT): RT;
+	export function parseJson<RT extends CounterFragment = CounterFragment, JT extends ISliderFragment = ISliderFragment>(instance: RT, json?: JT): RT;
+	export function parseJson<RT extends CounterFragment = CounterFragment, JT extends ISliderFragment = ISliderFragment>(instanceOrJson: RT | JT, json?: JT) {
 		if (!(instanceOrJson instanceof CounterFragment)) {
 			json = instanceOrJson;
-			instanceOrJson = new CounterFragment();
+			instanceOrJson = new CounterFragment() as RT;
 		}
 		return SliderFragment.parseJson.call(this, instanceOrJson, json);
 	}

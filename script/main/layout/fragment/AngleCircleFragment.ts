@@ -1,10 +1,15 @@
 class AngleCircleFragment extends TextFragment {
-	TYPE = "AngleCircleFragment";
+	override readonly TYPE: string = "AngleCircleFragment";
+	protected value?: number;
+	protected radians?: boolean;
+	protected onChange?: (radians: number, degrees: number) => void;
+	protected onReset?: () => number;
+
 	constructor(...marks) {
 		super(...marks);
 		this.setValue(0);
 	}
-	resetContainer() {
+	override resetContainer() {
 		let view = new android.widget.TextView(getContext());
 		view.setPadding(toComplexUnitDip(16), toComplexUnitDip(8),
 			toComplexUnitDip(16), toComplexUnitDip(8));
@@ -14,7 +19,7 @@ class AngleCircleFragment extends TextFragment {
 		let currently = 0;
 		let previous = 0;
 		let moved = false;
-		view.setOnTouchListener((view, event) => {
+		view.setOnTouchListener(((view, event) => {
 			if (event.getAction() == android.view.MotionEvent.ACTION_DOWN) {
 				x = view.getWidth() / 2 - event.getX();
 				y = view.getHeight() / 2 - event.getY();
@@ -52,7 +57,7 @@ class AngleCircleFragment extends TextFragment {
 			}
 			view.getParent().requestDisallowInterceptTouchEvent(true);
 			return true;
-		});
+		}) as any);
 		view.setTextSize(toComplexUnitDp(22));
 		view.setGravity($.Gravity.CENTER);
 		view.setTextColor($.Color.WHITE);
@@ -61,8 +66,8 @@ class AngleCircleFragment extends TextFragment {
 		view.setLayoutParams(new android.view.ViewGroup.LayoutParams(toComplexUnitDip(188), toComplexUnitDip(188)));
 		this.setContainerView(view);
 	}
-	getTextView() {
-		return this.getContainer();
+	override getTextView() {
+		return this.getContainer() as android.widget.TextView;
 	}
 	getValue() {
 		return this.value || 0;
@@ -85,11 +90,11 @@ class AngleCircleFragment extends TextFragment {
 		}
 		return this;
 	}
-	setOnChangeListener(action) {
+	setOnChangeListener(action: typeof this.onChange) {
 		this.onChange = action;
 		return this;
 	}
-	setOnResetListener(action) {
+	setOnResetListener(action: typeof this.onReset) {
 		this.onReset = action;
 		return this;
 	}
@@ -102,16 +107,21 @@ class AngleCircleFragment extends TextFragment {
 		}
 		return false;
 	}
-	static parseJson(instanceOrJson, json) {
+}
+
+namespace AngleCircleFragment {
+	export function parseJson<RT extends AngleCircleFragment = AngleCircleFragment, JT extends IAngleCircleFragment = IAngleCircleFragment>(json?: JT): RT;
+	export function parseJson<RT extends AngleCircleFragment = AngleCircleFragment, JT extends IAngleCircleFragment = IAngleCircleFragment>(instance: RT, json?: JT): RT;
+	export function parseJson<RT extends AngleCircleFragment = AngleCircleFragment, JT extends IAngleCircleFragment = IAngleCircleFragment>(instanceOrJson: RT | JT, json?: JT) {
 		if (!(instanceOrJson instanceof AngleCircleFragment)) {
 			json = instanceOrJson;
-			instanceOrJson = new AngleCircleFragment();
+			instanceOrJson = new AngleCircleFragment() as RT;
 		}
-		instanceOrJson = TextFragment.parseJson.call(this, instanceOrJson, json);
 		json = calloutOrParse(this, json, instanceOrJson);
 		if (json === null || typeof json != "object") {
 			return instanceOrJson;
 		}
+		TextFragmentMixin.parseJson.call(this, instanceOrJson, json);
 		if (json.hasOwnProperty("value")) {
 			instanceOrJson.setValue(calloutOrParse(json, json.value, [this, instanceOrJson]));
 		}

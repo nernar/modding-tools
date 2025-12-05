@@ -53,16 +53,16 @@ layout/menu/MenuWindow.ts
 layout/sidebar/SidebarFragment.js
 layout/sidebar/SidebarWindow.ts
 
-layout/fragment/CategoryTitleFragment.js
-layout/fragment/ExplanatoryFragment.js
-layout/fragment/ButtonFragment.js
-layout/fragment/PropertyInputFragment.js
-layout/fragment/AutoCompleteInputFragment.js
-layout/fragment/SliderFragment.js
-layout/fragment/CounterFragment.js
-layout/fragment/AngleCircleFragment.js
-layout/fragment/AxisGroupFragment.js
-layout/fragment/SegmentGroupFragment.js
+layout/fragment/CategoryTitleFragment.ts
+layout/fragment/ExplanatoryFragment.ts
+layout/fragment/ButtonFragment.ts
+layout/fragment/PropertyInputFragment.ts
+layout/fragment/AutoCompleteInputFragment.ts
+layout/fragment/SliderFragment.ts
+layout/fragment/CounterFragment.ts
+layout/fragment/AngleCircleFragment.ts
+layout/fragment/AxisGroupFragment.ts
+layout/fragment/SegmentGroupFragment.ts
 
 tool/Tool.ts
 tool/InteractionTool.ts

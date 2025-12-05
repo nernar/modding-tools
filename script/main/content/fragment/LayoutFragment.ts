@@ -1,7 +1,7 @@
 abstract class LayoutFragment extends BaseFragment {
 	readonly TYPE: string = "LayoutFragment";
-	constructor() {
-		super();
+	constructor(...marks) {
+		super(...marks);
 		this.fragments = [];
 	}
 	override getContainer() {
@@ -20,7 +20,7 @@ abstract class LayoutFragment extends BaseFragment {
 	/**
 	 * @requires `isAndroid()`
 	 */
-	addViewDirectly(view, params) {
+	protected addViewDirectly(view: android.view.View, params?: android.view.ViewGroup.LayoutParams) {
 		let container = this.getContainerLayout();
 		if (container != null) {
 			if (params == null) {
@@ -30,7 +30,7 @@ abstract class LayoutFragment extends BaseFragment {
 			}
 		}
 	}
-	addFragment(fragment, params) {
+	addFragment(fragment: Fragment, params?: android.view.ViewGroup.LayoutParams) {
 		if (!(fragment instanceof Fragment)) {
 			Logger.Log("Modding Tools: You tried to add an element that is not a fragment to addFragment!", "WARNING");
 			return -1;
@@ -45,7 +45,7 @@ abstract class LayoutFragment extends BaseFragment {
 	/**
 	 * @requires `isAndroid()`
 	 */
-	addView(container, params) {
+	addView(container: android.view.View, params?: android.view.ViewGroup.LayoutParams) {
 		if (!(container instanceof android.view.View)) {
 			MCSystem.throwException("Modding Tools: Illegal view passed to LayoutFragment.addView!");
 		}
@@ -56,14 +56,14 @@ abstract class LayoutFragment extends BaseFragment {
 	getFragmentCount() {
 		return this.fragments.length;
 	}
-	getFragmentAt(index) {
+	getFragmentAt(index: number) {
 		if (index >= this.fragments.length || index < 0) {
 			Logger.Log("Modding Tools: Not found LayoutFragment element at index " + index + "!", "WARNING");
 			return null;
 		}
 		return this.fragments[index];
 	}
-	indexOf(fragmentOrView) {
+	indexOf(fragmentOrView: Fragment | android.view.View) {
 		if (fragmentOrView instanceof android.view.View) {
 			for (let index = 0; index < this.fragments.length; index++) {
 				let fragment = this.fragments[index];
@@ -75,7 +75,7 @@ abstract class LayoutFragment extends BaseFragment {
 		}
 		return this.fragments.indexOf(fragmentOrView);
 	}
-	findFragment(token) {
+	findFragment(token: string) {
 		for (let index = 0; index < this.getFragmentCount(); index++) {
 			let fragment = this.getFragmentAt(index);
 			if (fragment.getToken() == token) {
@@ -123,11 +123,11 @@ abstract class LayoutFragment extends BaseFragment {
 			}
 		}, when);
 	}
-	removeViewDirectly(view) {
+	protected removeViewDirectly(view: android.view.View) {
 		let container = this.getContainerLayout();
 		container != null && container.removeView(view);
 	}
-	removeFragment(indexOrFragment) {
+	removeFragment(indexOrFragment: number | Fragment) {
 		if (indexOrFragment instanceof Fragment) {
 			indexOrFragment = this.indexOf(indexOrFragment);
 		}
@@ -143,7 +143,7 @@ abstract class LayoutFragment extends BaseFragment {
 		fragment.deattach();
 		return true;
 	}
-	removeFragments(condition?) {
+	removeFragments(condition?: (fragment: Fragment, index: number) => boolean) {
 		for (let index = this.fragments.length - 1; index >= 0; index--) {
 			let fragment = this.fragments[index];
 			if (condition == null || condition.call(this, fragment, index)) {

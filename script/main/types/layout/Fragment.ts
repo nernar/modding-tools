@@ -14,7 +14,7 @@ namespace SidebarFragment {
 	}
 }
 
-interface IAngleCircleFragment<ABC = IAngleCircleFragment<any>> extends ITextFragment {
+interface IAngleCircleFragment<ABC = IAngleCircleFragment<any>> extends ITextFragmentMixin<ABC> {
 	value?: CallableJsonProperty1<ABC, number>;
 	change?: (self: ABC, radians: number, degress: number) => void;
 	reset?: (self: ABC, radians: number, degress: number) => number;
@@ -27,15 +27,21 @@ interface IAxisGroupFragment<ABC = IAxisGroupFragment<any>> extends ILayoutFragm
 	resetItem?: (self: ABC, item: IBaseFragment, index: number, value: number) => void | number;
 }
 
-interface IPropertyInputFragment<ABC = IPropertyInputFragment<any>> extends ITextFragment {
+interface IPropertyInputFragment<ABC = IPropertyInputFragment<any>> extends ITextFragmentMixin<ABC> {
 	hint?: CallableJsonProperty1<ABC, string>;
 }
 
-interface ISliderFragment<ABC = ISliderFragment<any>> extends ITextFragment {
+interface ISliderFragment<ABC = ISliderFragment<any>> extends ITextFragmentMixin<ABC> {
 	modifiers?: CallableJsonProperty1<ABC, number[]>;
 	modifier?: CallableJsonProperty1<ABC, number>;
 	value?: CallableJsonProperty1<ABC, number>;
 	suffix?: CallableJsonProperty1<ABC, string>;
 	change?: (self: ABC, value: number, difference: number) => void;
-	reset?: (self: ABC, value: number) => number;
+	reset?: (self: ABC, value: number) => void | number | boolean;
+}
+
+interface IButtonFragment<ABC = IButtonFragment<any>> extends ITextFragmentMixin<ABC>, ISelectableFragment<ABC> {
+}
+
+interface ISegmentGroupFragment<ABC = ISegmentGroupFragment<any>> extends ILayoutFragment<ABC>, ISelectableLayoutFragment<ABC> {
 }

@@ -1,6 +1,6 @@
 class AutoCompleteInputFragment extends PropertyInputFragment {
-	TYPE = "AutoCompleteInputFragment";
-	resetContainer() {
+	override readonly TYPE: string = "AutoCompleteInputFragment";
+	override resetContainer() {
 		let view = new android.widget.AutoCompleteTextView(getContext());
 		view.setDropDownBackgroundDrawable(new BitmapDrawable("popup").toDrawableInThread());
 		view.setInputType(android.text.InputType.TYPE_CLASS_TEXT |
@@ -15,11 +15,11 @@ class AutoCompleteInputFragment extends PropertyInputFragment {
 		view.setTypeface(typeface);
 		view.setHorizontallyScrolling(true);
 		view.setFocusableInTouchMode(true);
-		view.setOnClickListener(function (view) {
+		view.setOnClickListener(((view) => {
 			view.requestFocus();
 			let ims = getContext().getSystemService(android.content.Context.INPUT_METHOD_SERVICE);
 			ims.showSoftInput(view, android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT);
-		});
+		}) as any);
 		this.setContainerView(view);
 	}
 	getAdapter() {
@@ -29,7 +29,12 @@ class AutoCompleteInputFragment extends PropertyInputFragment {
 		this.getTextView().setAdapter(adapter);
 		return this;
 	}
-	static parseJson(instanceOrJson, json) {
+}
+
+namespace AutoCompleteInputFragment {
+	export function parseJson(json?: IPropertyInputFragment): AutoCompleteInputFragment;
+	export function parseJson(instance: AutoCompleteInputFragment, json?: IPropertyInputFragment): AutoCompleteInputFragment;
+	export function parseJson(instanceOrJson: AutoCompleteInputFragment | IPropertyInputFragment, json?: IPropertyInputFragment) {
 		if (!(instanceOrJson instanceof AutoCompleteInputFragment)) {
 			json = instanceOrJson;
 			instanceOrJson = new AutoCompleteInputFragment();

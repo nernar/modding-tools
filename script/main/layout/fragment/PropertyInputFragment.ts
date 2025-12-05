@@ -1,6 +1,6 @@
 class PropertyInputFragment extends TextFragment {
-	TYPE = "PropertyInputFragment";
-	resetContainer() {
+	override readonly TYPE: string = "PropertyInputFragment";
+	override resetContainer() {
 		let view = new android.widget.EditText(getContext());
 		view.setInputType(android.text.InputType.TYPE_CLASS_TEXT |
 			android.text.InputType.TYPE_TEXT_FLAG_MULTI_LINE |
@@ -16,33 +16,38 @@ class PropertyInputFragment extends TextFragment {
 		view.setTypeface(typeface);
 		view.setHorizontallyScrolling(true);
 		view.setFocusableInTouchMode(true);
-		view.setOnClickListener(function (view) {
+		view.setOnClickListener(((view: android.view.View) => {
 			view.requestFocus();
 			let ims = getContext().getSystemService(android.content.Context.INPUT_METHOD_SERVICE);
 			ims.showSoftInput(view, android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT);
-		});
+		}) as any);
 		this.setContainerView(view);
 	}
-	getTextView() {
-		return this.getContainer();
+	override getTextView() {
+		return this.getContainer() as android.widget.EditText;
 	}
-	setHint(who) {
+	setHint(who: string) {
 		this.getTextView().setHint("" + who);
 		return this;
 	}
-	isRequiresFocusable() {
+	override isRequiresFocusable() {
 		return true;
 	}
-	static parseJson(instanceOrJson, json) {
+}
+
+namespace PropertyInputFragment {
+	export function parseJson<RT extends PropertyInputFragment = PropertyInputFragment, JT extends IPropertyInputFragment = IPropertyInputFragment>(json?: JT): RT;
+	export function parseJson<RT extends PropertyInputFragment = PropertyInputFragment, JT extends IPropertyInputFragment = IPropertyInputFragment>(instance: RT, json?: JT): RT;
+	export function parseJson<RT extends PropertyInputFragment = PropertyInputFragment, JT extends IPropertyInputFragment = IPropertyInputFragment>(instanceOrJson: RT | JT, json?: JT) {
 		if (!(instanceOrJson instanceof PropertyInputFragment)) {
 			json = instanceOrJson;
-			instanceOrJson = new PropertyInputFragment();
+			instanceOrJson = new PropertyInputFragment() as RT;
 		}
-		instanceOrJson = TextFragment.parseJson.call(this, instanceOrJson, json);
 		json = calloutOrParse(this, json, instanceOrJson);
 		if (json === null || typeof json != "object") {
 			return instanceOrJson;
 		}
+		TextFragmentMixin.parseJson.call(this, instanceOrJson, json);
 		if (json.hasOwnProperty("hint")) {
 			instanceOrJson.setHint(calloutOrParse(json, json.hint, [this, instanceOrJson]));
 		}
