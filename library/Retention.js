@@ -1,6 +1,6 @@
 /*
 
-   Copyright 2017-2023 Nernar (github.com/nernar)
+   Copyright 2017-2022 Nernar (github.com/nernar)
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 */
 LIBRARY({
     name: "Retention",
-    version: 99,
+    version: 1,
     api: "AdaptedScript",
     shared: true
 });
@@ -92,9 +92,7 @@ var reportAction = function (error) {
  * useful for visualizing and debugging problems.
  */
 var reportError = function (error) {
-    if (reportAction) {
-        reportAction.call(this, error);
-    }
+    reportAction && reportAction.call(this, error);
 };
 EXPORT("reportError", reportError);
 /**
@@ -141,25 +139,22 @@ EXPORT("showReportDialog", showReportDialog);
  */
 var handleOnThread = (function () {
     if (display != null) {
-        var handler_1 = null;
+        var HANDLER_1 = new android.os.Handler();
         return function (action, time) {
+            var _this = this;
             var _a;
-            var self = this;
             (_a = getContext()) === null || _a === void 0 ? void 0 : _a.runOnUiThread(new java.lang.Runnable({
-                run: function () {
-                    handler_1 = handler_1 || new android.os.Handler();
-                    handler_1.postDelayed(new java.lang.Runnable({
-                        run: function () { return action != null && action.apply(self); }
-                    }), time >= 0 ? time : 0);
-                }
+                run: function () { return HANDLER_1.postDelayed(new java.lang.Runnable({
+                    run: function () { return action && action.apply(_this); }
+                }), time >= 0 ? time : 0); }
             }));
         };
     }
     var EXECUTOR = java.util.concurrent.Executors.newScheduledThreadPool(10);
     return function (action, time) {
-        var self = this;
+        var _this = this;
         EXECUTOR.schedule(new java.lang.Runnable({
-            run: function () { return action != null && action.apply(self); }
+            run: function () { return action && action.apply(_this); }
         }), time >= 0 ? time : 0, java.util.concurrent.TimeUnit.MILLISECONDS);
     };
 })();
@@ -173,11 +168,9 @@ EXPORT("handleOnThread", handleOnThread);
  */
 var handle = function (action, time) {
     var _this = this;
-    return handleOnThread.call(this, function () {
+    return handleOnThread(function () {
         try {
-            if (action) {
-                action.apply(_this);
-            }
+            action && action.apply(_this);
         }
         catch (e) {
             reportError(e);
@@ -196,7 +189,7 @@ EXPORT("handle", handle);
 var acquire = function (action, fallback) {
     var _this = this;
     var completed = false;
-    handleOnThread.call(this, function () {
+    handleOnThread(function () {
         try {
             if (action) {
                 var value = action.apply(_this);
@@ -236,13 +229,11 @@ EXPORT("interruptThreads", interruptThreads);
  * @param priority number between 1-10
  */
 var handleThread = function (action, priority) {
-    var self = this;
+    var _this = this;
     var thread = new java.lang.Thread(new java.lang.Runnable({
         run: function () {
             try {
-                if (action) {
-                    action.apply(self);
-                }
+                action && action.apply(_this);
             }
             catch (e) {
                 reportError(e);
@@ -427,8 +418,8 @@ var toDigestMd5 = (function () {
         digest.update(bytes);
         var byted = digest.digest();
         var sb = new java.lang.StringBuilder();
-        for (var i = 0; i < byted.length; i++) {
-            sb.append(java.lang.Integer.toHexString(0xFF & byted[i]));
+        for (var offset = 0; offset < byted.length; offset++) {
+            sb.append(java.lang.Integer.toHexString(0xFF & byted[offset]));
         }
         return sb.toString();
     };

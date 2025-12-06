@@ -42,7 +42,7 @@ declare const showReportDialog: (message: string, title: string, fallback?: Func
  * exceptions will cause crash.
  * @param action action
  * @param time expectation
- * @returns sheduled future when no associated context
+ * @returns scheduled future when no associated context
  */
 declare const handleOnThread: (action: () => void, time?: number) => void | java.util.concurrent.ScheduledFuture<any>;
 /**
@@ -61,7 +61,7 @@ declare const handle: (action: () => void, time?: number) => void | java.util.co
  * @returns action result or {@link fallback}
  * @see {@link handleOnThread}
  */
-declare const acquire: (action: () => any, fallback?: any) => any;
+declare const acquire: <T = any>(action: () => T, fallback?: T) => T;
 /**
  * Interrupts currently stacked threads, it must
  * be implemented in your {@link java.lang.Thread Thread} itself.
@@ -107,7 +107,7 @@ declare const isNumeralMany: (count: number) => boolean;
  * @param str stroke to translate
  * @param args to replace with `format`
  */
-declare const translate: (str: string, args?: any[]) => string;
+declare const translate: (str: string, args?: any | any[]) => string;
 /**
  * Translates existing strokes by numeral, added via
  * {@link Translation.addTranslation}, replaces
@@ -120,7 +120,7 @@ declare const translate: (str: string, args?: any[]) => string;
  * @param whenMany count >= *5, count % 10 = 0, see {@link isNumeralMany}
  * @param args to replace with `format`, when count = value it will be remapped additionally
  */
-declare const translateCounter: (count: number, whenZero: string, whenVerb: string, whenLittle: string, whenMany: string, args?: any[]) => string;
+declare const translateCounter: (count: number, whenZero: string, whenVerb: string, whenLittle: string, whenMany: string, args?: any | any[]) => string;
 /**
  * Shortcut to currently context decor window.
  */
