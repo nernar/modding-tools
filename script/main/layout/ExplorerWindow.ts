@@ -831,7 +831,7 @@ if (isAndroid()) {
 				} else {
 					object.name = item;
 				}
-				object.type = Files.typeof(file);
+				object.type = Files.mime(file);
 				let date = new java.util.Date(file.lastModified()),
 					format = new java.text.SimpleDateFormat();
 				format.applyPattern("d MMM, yyyy")

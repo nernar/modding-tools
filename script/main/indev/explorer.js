@@ -669,7 +669,7 @@ const attachAdvancedExplorer = function(path, mayWrap, action) {
 				reportError(e);
 			}
 			if (!overriden) {
-				let extension = Files.typeof(file);
+				let extension = Files.mime(file);
 				openSupportedFileIfMay(file, extension);
 			}
 		});

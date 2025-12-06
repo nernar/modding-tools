@@ -1,10 +1,10 @@
 header.ts
 translation.ts
 
-polyfill/Object.js
-polyfill/String.js
-polyfill/Files.js
-polyfill/Drawable.js
+polyfill/Object.ts
+polyfill/String.ts
+polyfill/Files.ts
+polyfill/Drawable.ts
 
 utils/object.ts
 utils/math.ts
