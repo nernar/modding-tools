@@ -17,7 +17,7 @@
 */
 
 // Currently build information
-const REVISION = "develop-alpha-0.4-21.04.2025-0";
+const REVISION = "develop-alpha-0.4-07.12.2025-0";
 const NAME = __mod__.getInfoProperty("name");
 const AUTHOR = __mod__.getInfoProperty("author");
 const VERSION = __mod__.getInfoProperty("version");
@@ -178,6 +178,7 @@ const CONTEXT = (function() {
 	try {
 		return InnerCorePackages.mod.executable.Compiler.assureContextForCurrentThread();
 	} catch (e) {
+		// @ts-expect-error
 		return __mod__.compiledModSources.get(0).parentContext;
 	}
 })();

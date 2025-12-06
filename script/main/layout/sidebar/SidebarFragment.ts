@@ -139,6 +139,50 @@ namespace SidebarFragment {
 			return instanceOrJson;
 		}
 
+		export function parseLegacyJson<RT extends SidebarFragment.Rail = SidebarFragment.Rail, JT extends SidebarFragment.IRail = SidebarFragment.IRail>(json?: JT): RT;
+		export function parseLegacyJson<RT extends SidebarFragment.Rail = SidebarFragment.Rail, JT extends SidebarFragment.IRail = SidebarFragment.IRail>(instance: RT, json?: JT, preferredFragment?: string): RT;
+		/*
+		{
+			groups: [{
+				icon: "uiFrame",
+				items: [{
+					icon: "explorerImport",
+					title: translate("Prototype")
+				}, {
+					icon: "inspectorPrototype",
+					title: translate("Description")
+				}, {
+					icon: "uiFrame",
+					title: translate("Location")
+				}, {
+					icon: "uiFrameMarkup",
+					title: translate("Substrate")
+				}, {
+					icon: "uiFrameLayer",
+					title: translate("Move")
+				}, {
+					icon: "uiFrameSubstrate",
+					title: translate("Transparency")
+				}
+			}]
+		}
+		*/
+		export function parseLegacyJson<RT extends SidebarFragment.Rail = SidebarFragment.Rail, JT extends SidebarFragment.IRail = SidebarFragment.IRail>(instanceOrJson: RT | JT, json?: JT, preferredFragment?: string) {
+			if (!(instanceOrJson instanceof SidebarFragment.Rail)) {
+				json = instanceOrJson;
+				instanceOrJson = new SidebarFragment.Rail() as RT;
+			} else {
+				instanceOrJson.getSelectionFragment().removeFragments();
+			}
+			instanceOrJson = ScrollFragment.parseJson.call(this, instanceOrJson, json, preferredFragment || "sidebarRailItem") as RT;
+			json = calloutOrParse(this, json, instanceOrJson);
+			if (json == null || typeof json != "object") {
+				return instanceOrJson;
+			}
+			// TODO: groups, add rail with items to every group
+			return instanceOrJson;
+		};
+
 		export class Item extends LayoutFragment {
 			protected onFetch?: () => void | string;
 			override resetContainer() {
@@ -281,3 +325,112 @@ registerFragmentJson("sidebarRailItem", SidebarFragment.Rail.Item);
 
 registerFragmentJson("sidebar_panel", SidebarFragment.Panel);
 registerFragmentJson("sidebarPanel", SidebarFragment.Panel);
+
+/*
+SidebarWindow.parseJson = function(instanceOrJson, json) {
+	if (!(instanceOrJson instanceof SidebarWindow)) {
+		json = instanceOrJson;
+		instanceOrJson = new SidebarWindow();
+	}
+	json = calloutOrParse(this, json, instanceOrJson);
+	while (instanceOrJson.getGroupCount() > 0) {
+		instanceOrJson.removeGroup(0);
+	}
+	if (json === null || typeof json != "object") {
+		return instanceOrJson;
+	}
+	if (json.hasOwnProperty("background")) {
+		instanceOrJson.setBackground(calloutOrParse(json, json.background, [this, instanceOrJson]));
+	}
+	if (json.hasOwnProperty("tabBackground")) {
+		instanceOrJson.setTabBackground(calloutOrParse(json, json.tabBackground, [this, instanceOrJson]));
+	}
+	if (json.hasOwnProperty("selectGroup")) {
+		instanceOrJson.setOnGroupSelectListener(parseCallback(json, json.selectGroup, this));
+	}
+	if (json.hasOwnProperty("undockGroup")) {
+		instanceOrJson.setOnGroupUndockListener(parseCallback(json, json.undockGroup, this));
+	}
+	if (json.hasOwnProperty("fetchGroup")) {
+		instanceOrJson.setOnGroupFetchListener(parseCallback(json, json.fetchGroup, this));
+	}
+	if (json.hasOwnProperty("selectItem")) {
+		instanceOrJson.setOnItemSelectListener(parseCallback(json, json.selectItem, this));
+	}
+	if (json.hasOwnProperty("fetchItem")) {
+		instanceOrJson.setOnItemFetchListener(parseCallback(json, json.fetchItem, this));
+	}
+	if (json.hasOwnProperty("groups")) {
+		let groups = calloutOrParse(json, json.groups, [this, instanceOrJson]);
+		if (groups !== null && typeof groups == "object") {
+			if (!Array.isArray(groups)) groups = [groups];
+			for (let i = 0; i < groups.length; i++) {
+				let group = calloutOrParse(groups, groups[i], [this, json, instanceOrJson]);
+				if (group !== null && typeof group == "object") {
+					group = SidebarWindow.Group.parseJson.call(this, group);
+					instanceOrJson.addGroup(group);
+				}
+			}
+		}
+	}
+	if (json.hasOwnProperty("select")) {
+		instanceOrJson.select(calloutOrParse(json, json.select, [this, instanceOrJson]));
+	}
+	return instanceOrJson;
+};
+
+SidebarWindow.Group.parseJson = function(instanceOrJson, json) {
+	if (!(instanceOrJson instanceof SidebarWindow.Group)) {
+		json = instanceOrJson;
+		instanceOrJson = new SidebarWindow.Group();
+	}
+	json = calloutOrParse(this, json, instanceOrJson);
+	while (instanceOrJson.getItemCount() > 0) {
+		instanceOrJson.removeItem(0);
+	}
+	if (json === null || typeof json != "object") {
+		return instanceOrJson;
+	}
+	if (json.hasOwnProperty("selectedBackground")) {
+		instanceOrJson.setSelectedBackground(calloutOrParse(json, json.selectedBackground, [this, instanceOrJson]));
+	}
+	if (json.hasOwnProperty("unselectedBackground")) {
+		instanceOrJson.setUnselectedBackground(calloutOrParse(json, json.unselectedBackground, [this, instanceOrJson]));
+	}
+	if (json.hasOwnProperty("background")) {
+		instanceOrJson.setBackground(calloutOrParse(json, json.background, [this, instanceOrJson]));
+	}
+	if (json.hasOwnProperty("icon")) {
+		instanceOrJson.setImage(calloutOrParse(json, json.icon, [this, instanceOrJson]));
+	}
+	if (json.hasOwnProperty("select")) {
+		instanceOrJson.setOnSelectListener(parseCallback(json, json.select, this));
+	}
+	if (json.hasOwnProperty("undock")) {
+		instanceOrJson.setOnUndockListener(parseCallback(json, json.undock, this));
+	}
+	if (json.hasOwnProperty("fetch")) {
+		instanceOrJson.setOnFetchListener(parseCallback(json, json.fetch, this));
+	}
+	if (json.hasOwnProperty("selectItem")) {
+		instanceOrJson.setOnItemSelectListener(parseCallback(json, json.selectItem, this));
+	}
+	if (json.hasOwnProperty("fetchItem")) {
+		instanceOrJson.setOnItemFetchListener(parseCallback(json, json.fetchItem, this));
+	}
+	if (json.hasOwnProperty("items")) {
+		let items = calloutOrParse(json, json.items, [this, instanceOrJson]);
+		if (items !== null && typeof items == "object") {
+			if (!Array.isArray(items)) items = [items];
+			for (let i = 0; i < items.length; i++) {
+				let item = calloutOrParse(items, items[i], [this, json, instanceOrJson]);
+				if (item !== null && typeof item == "object") {
+					item = SidebarWindow.Group.Item.parseJson.call(this, item);
+					instanceOrJson.addItem(item);
+				}
+			}
+		}
+	}
+	return instanceOrJson;
+};
+*/

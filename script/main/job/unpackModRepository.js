@@ -41,7 +41,7 @@ unpackModRepository = function(repository, output, appendToExisting) {
 		                if (name == "build.config" || name == "/build.config" || name == "modpack.json" || name == "/modpack.json") {
 		                	break;
 		                } else if (name.endsWith("/build.config") || name.endsWith("/modpack.json")) {
-		                	relativeDirectory = Files.basename(name.substring(0, name.length - 13));
+		                	relativeDirectory += " (" + Files.basename(name.substring(0, name.length - 13)) + ")";
 		                	buildConfigDirectory = Files.dirname(name);
 		                	break;
 		                }

@@ -23,6 +23,7 @@ class Worker {
 			Logger.Log("Modding Tools: Worker.getProperty requires at least 2 arguments!", "WARNING");
 			return;
 		}
+		stringifyObjectInline("Worker.getProperty", arguments);
 		if (Array.isArray(properties)) {
 			let result = 0, count = 0;
 			for (let offset = 0; offset < properties.length; offset++) {
@@ -63,6 +64,7 @@ class Worker {
 			Logger.Log("Modding Tools: Worker.appendProperty requires at least 3 arguments!", "WARNING");
 			return;
 		}
+		stringifyObjectInline("Worker.appendProperty", arguments);
 		if (Array.isArray(properties)) {
 			for (let offset = 0; offset < properties.length; offset++) {
 				let property = source[properties[offset]];
@@ -95,6 +97,7 @@ class Worker {
 			Logger.Log("Modding Tools: Worker.setProperty requires at least 3 arguments!", "WARNING");
 			return;
 		}
+		stringifyObjectInline("Worker.setProperty", arguments);
 		if (Array.isArray(properties)) {
 			for (let offset = 0; offset < properties.length; offset++) {
 				let property = source[properties[offset]];
@@ -121,6 +124,7 @@ class Worker {
 			Logger.Log("Modding Tools: Worker.resetProperty requires at least 2 arguments!", "WARNING");
 			return;
 		}
+		stringifyObjectInline("Worker.resetProperty", arguments);
 		if (Array.isArray(properties)) {
 			for (let offset = 0; offset < properties.length; offset++) {
 				let property = source[properties[offset]];
