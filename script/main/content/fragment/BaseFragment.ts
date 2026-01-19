@@ -62,14 +62,14 @@ abstract class BaseFragment extends Fragment {
 		}
 		return this[tag + "Background"] || null;
 	}
-	setBackground(src: IDrawableJson, tag?: string, layout?: android.view.View) {
+	setBackground(src: IDrawableJson | Drawable, tag?: string, layout?: android.view.View) {
 		if (isAndroid()) {
 			if (layout == null) {
 				layout = this.getContainerRoot();
 			}
 			if (layout != null) {
 				if (!(src instanceof Drawable)) {
-					src = Drawable.parseJson.call(this, src);
+					src = Drawable.parseJson.call(this, src) as Drawable;
 				}
 				src.attachAsBackground(layout);
 			}

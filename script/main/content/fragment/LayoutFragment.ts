@@ -85,7 +85,7 @@ abstract class LayoutFragment extends BaseFragment {
 		return null;
 	}
 	obtain = (() => {
-		let obtain = (on, what, when) => {
+		let obtain = (on, what, when?) => {
 			if (typeof when != "function" || when(on)) {
 				what(on);
 			}
@@ -96,7 +96,7 @@ abstract class LayoutFragment extends BaseFragment {
 				}
 			}
 		};
-		return (what, when) => obtain(this, what, when);
+		return (what, when?) => obtain(this, what, when);
 	})();
 	updateLayout() {
 		return BaseFragment.prototype.update.apply(this, arguments);
@@ -147,6 +147,12 @@ abstract class LayoutFragment extends BaseFragment {
 			if (condition == null || condition.call(this, fragment, index)) {
 				this.removeFragment(index);
 			}
+		}
+	}
+	beginDelayedTransition(actor: android.transition.Transition) {
+		let window = this.getWindow();
+		if (window != null && window instanceof TransitionWindow) {
+			window.beginDelayedTransition(this.getContainerRoot(), actor);
 		}
 	}
 	override isRequiresFocusable() {

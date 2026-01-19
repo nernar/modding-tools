@@ -334,7 +334,7 @@ Drawable.applyDescribe = (drawable, json) => {
 };
 
 namespace Drawable {
-	export function parseJson(instanceOrJson, json?) {
+	export function parseJson(instanceOrJson, json?): Drawable {
 		if (!(instanceOrJson instanceof Drawable)) {
 			json = instanceOrJson;
 			instanceOrJson = new Drawable();
