@@ -181,7 +181,7 @@ const recursiveIndexateWithExport = function(path, what, timeout, cancelMessage,
 
 	result = compileToProduce(result);
 	file.getParentFile().mkdirs();
-	Files.writeBytes(file, result);
+	Files.write(file, result);
 
 	if (doneMessage !== undefined) {
 		// setCompletionMessage(doneMessage);
