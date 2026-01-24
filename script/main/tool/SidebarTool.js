@@ -44,8 +44,18 @@ SidebarTool.prototype.getSidebarDescriptor = function() {
 SidebarTool.prototype.describeSidebar = function() {
 	let sidebar = this.getSidebarWindow();
 	if (sidebar == null) return;
-	SidebarWindow.parseJson.call(this, sidebar, this.getSidebarDescriptor());
-	// if (sidebar.isSelected()) sidebar.reinflateLayout();
+	let sidebarFromJson = SidebarWindow.parseJson.call(this, sidebar, this.getSidebarDescriptor());
+	if (sidebarFromJson != null && sidebar != sidebarFromJson) {
+		// probably a little ugly, but we should support both behaviors
+		if (sidebar.isOpened()) {
+			sidebar.dismiss();
+			sidebarFromJson.attach();
+		}
+		this.sidebarWindow = (sidebar = sidebarFromJson);
+	}
+	if (sidebar instanceof LegacySidebarWindow && sidebar.isSelected()) {
+		sidebar.reinflateLayout();
+	}
 };
 
 SidebarTool.prototype.describe = function() {
@@ -53,11 +63,13 @@ SidebarTool.prototype.describe = function() {
 	this.describeSidebar();
 };
 
-// SidebarTool.prototype.getSelectedGroup = function() {
-	// let sidebar = this.getSidebarWindow();
-	// if (sidebar == null) return SidebarWindow.NOTHING_SELECTED;
-	// return sidebar.getSelected();
-// };
+SidebarTool.prototype.getSelectedGroup = function() {
+	let sidebar = this.getSidebarWindow();
+	if (sidebar == null || !(sidebar instanceof LegacySidebarWindow)) {
+		return LegacySidebarWindow.NOTHING_SELECTED;
+	}
+	return sidebar.getSelected();
+};
 
 SidebarTool.prototype.attach = function() {
 	if (this.isAttached()) {
@@ -98,9 +110,13 @@ SidebarTool.prototype.control = function() {
 
 SidebarTool.prototype.collapse = function() {
 	let sidebar = this.getSidebarWindow();
-	if (sidebar/* && !sidebar.isSelected()*/) sidebar.dismiss();
+	if (sidebar && (!(sidebar instanceof LegacySidebarWindow) || !sidebar.isSelected())) {
+		sidebar.dismiss();
+	}
 	MenuTool.prototype.collapse.apply(this, arguments);
-	// if (sidebar && sidebar.isSelected()) this.state = SidebarTool.State.COLLAPSED_WITHOUT_SIDEBAR;
+	if (sidebar && sidebar instanceof LegacySidebarWindow && sidebar.isSelected()) {
+		this.state = SidebarTool.State.COLLAPSED_WITHOUT_SIDEBAR;
+	}
 };
 
 SidebarTool.prototype.isCollapsedWithoutSidebar = function() {

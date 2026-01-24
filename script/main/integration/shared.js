@@ -176,6 +176,7 @@ const API = assign({}, {
 	OverlayFragment: OverlayFragment,
 	ControlFragment: ControlFragment,
 	SidebarFragment: SidebarFragment,
+	LegacySidebarFragment: LegacySidebarFragment, // DEPRECATED
 
 	// Window prototypes
 	WindowProxy: WindowProxy,
@@ -199,6 +200,7 @@ const API = assign({}, {
 	ControlWindow: ControlWindow,
 	MenuWindow: MenuWindow,
 	SidebarWindow: SidebarWindow,
+	LegacySidebarWindow: LegacySidebarWindow, // DEPRECATED
 
 	// Functions used inside popup prototypes
 	openPopup: function(id, popup) {

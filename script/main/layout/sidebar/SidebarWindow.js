@@ -43,14 +43,22 @@ SidebarWindow.prototype.resetWindow = function() {
 	// return this.getFragment().reinflateLayout();
 // };
 
-// SidebarWindow.isSelected = function(group) {
-	// let currently = UniqueHelper.getWindow("SidebarWindow");
-	// return currently != null && currently.getSelected() == group;
-// };
+SidebarWindow.isSelected = function(group) {
+	return LegacySidebarWindow.isSelected(group);
+};
 
 SidebarWindow.parseJson = function(instanceOrJson, json) {
 	if (!(instanceOrJson instanceof SidebarWindow)) {
+		if (instanceOrJson instanceof LegacySidebarWindow) {
+			return LegacySidebarWindow.parseJson.call(this, instanceOrJson, json);
+		}
 		json = instanceOrJson;
+		instanceOrJson = null;
+	}
+	if (json !== null && typeof json == "object" && json.hasOwnProperty("groups")) {
+		return LegacySidebarWindow.parseJson.call(this, json);
+	}
+	if (!(instanceOrJson instanceof SidebarWindow)) {
 		instanceOrJson = new SidebarWindow();
 	}
 	SidebarFragment.Rail.parseJson.call(this, instanceOrJson.getFragment(), json);

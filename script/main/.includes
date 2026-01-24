@@ -54,6 +54,8 @@ layout/control/ControlWindow.js
 layout/menu/MenuWindow.js
 layout/sidebar/SidebarFragment.js
 layout/sidebar/SidebarWindow.js
+layout/sidebar/LegacySidebarFragment.js
+layout/sidebar/LegacySidebarWindow.js
 
 layout/fragment/CategoryTitleFragment.js
 layout/fragment/ExplanatoryFragment.js
