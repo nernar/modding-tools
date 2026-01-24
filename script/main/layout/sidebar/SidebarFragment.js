@@ -143,6 +143,46 @@ SidebarFragment.Rail.parseJson = function(instanceOrJson, json, preferredFragmen
 	return instanceOrJson;
 };
 
+/*
+groups: [{
+	icon: "uiFrame",
+	items: [{
+		icon: "explorerImport",
+		title: translate("Prototype")
+	}, {
+		icon: "inspectorPrototype",
+		title: translate("Description")
+	}, {
+		icon: "uiFrame",
+		title: translate("Location")
+	}, {
+		icon: "uiFrameMarkup",
+		title: translate("Substrate")
+	}, {
+		icon: "uiFrameLayer",
+		title: translate("Move")
+	}, {
+		icon: "uiFrameSubstrate",
+		title: translate("Transparency")
+	}]
+}]
+*/
+
+SidebarFragment.Rail.parseLegacyJson = function(instanceOrJson, json, preferredFragment) {
+	if (!(instanceOrJson instanceof SidebarFragment.Rail)) {
+		json = instanceOrJson;
+		instanceOrJson = new SidebarFragment.Rail();
+	} else {
+		instanceOrJson.getSelectionFragment().removeFragments();
+	}
+	instanceOrJson = ScrollFragment.parseJson.call(this, instanceOrJson, json, preferredFragment || "sidebarRailItem");
+	json = calloutOrParse(this, json, instanceOrJson);
+	if (json == null || typeof json != "object") {
+		return instanceOrJson;
+	}
+	// groups, add rail with items to every group
+};
+
 registerFragmentJson("sidebar_rail", SidebarFragment.Rail);
 registerFragmentJson("sidebarRail", SidebarFragment.Rail);
 
