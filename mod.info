@@ -1,6 +1,6 @@
 {
 	"name": "Modding Tools",
-	"version": "0.4-snapshot3",
+	"version": "0.4-snapshot4",
 	"author": "Nernar",
 	"description": "Develop your mods with in-game tools.",
 	"clientOnly": true,
