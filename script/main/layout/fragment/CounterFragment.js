@@ -35,23 +35,6 @@ CounterFragment.prototype.resetContainer = function() {
 	content.addView(subtract, params);
 
 	modifier.setPadding(toComplexUnitDip(8), 0, toComplexUnitDip(8), 0);
-	modifier.setOnClickListener(function() {
-		try {
-			self.modifier++;
-			self.modifier == self.modifiers.length && (self.modifier = 0);
-			self.updateCounter();
-		} catch (e) {
-			reportError(e);
-		}
-	});
-	modifier.setOnLongClickListener(function() {
-		try {
-			return !!(self.reset && self.reset());
-		} catch (e) {
-			reportError(e);
-		}
-		return false;
-	});
 	modifier.setTag("counterText");
 	content.addView(modifier, new android.widget.LinearLayout.
 		LayoutParams(toComplexUnitDip(104), $.ViewGroup.LayoutParams.MATCH_PARENT));

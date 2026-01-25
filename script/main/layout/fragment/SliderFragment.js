@@ -20,13 +20,17 @@ SliderFragment.prototype.resetContainer = function() {
 	let y = 0;
 	let currently = 0;
 	let previous = 0;
-	let moved = false;
+	let fling = false;
+	let downTime = -1;
 	view.setOnTouchListener(function(view, event) {
 		if (event.getAction() == android.view.MotionEvent.ACTION_DOWN) {
-			x = event.getX();
-			y = event.getY();
-			previous = currently = self.value;
-			moved = false;
+			if (downTime == -1) {
+				x = event.getX();
+				y = event.getY();
+				previous = currently = self.value;
+				fling = false;
+			}
+			downTime = Date.now();
 		} else if (event.getAction() == android.view.MotionEvent.ACTION_MOVE) {
 			try {
 				let current = self.modifiers[self.modifier];
@@ -34,21 +38,24 @@ SliderFragment.prototype.resetContainer = function() {
 				let offset = raw + toComplexUnitDip(40);
 				let size = (current > 0 ? 1 / current : current) * (offset < 0 ? -1 : 1) * (Math.pow(2, Math.abs(offset) / toComplexUnitDip(80)) - 1);
 				self.value = preround((current == 1 ? Math.floor(size) : Math.floor(size * current) / current) + currently);
-				if (self.value != previous) {
+				if (previous != self.value) {
+					fling = true;
 					previous = self.value;
 					self.updateCounter();
 				}
-				if (!moved) {
-					moved = Math.abs(raw) > toComplexUnitDip(8);
-				}
 			} catch (e) {
-				log("Modding Tools: SliderFragment.onTouch: " + e);
+				Logger.Log("Modding Tools: SliderFragment.onTouch: " + e, "WARNING");
 			}
 		} else if (event.getAction() == android.view.MotionEvent.ACTION_UP) {
 			try {
-				if (!moved) {
-					if (self.reset && event.getDownTime() > 1000) {
-						return !!self.reset();
+				if (!fling) {
+					let downDelta = Date.now() - downTime;
+					if (self.reset && downDelta >= 750) {
+						try {
+							return !!self.reset();
+						} finally {
+							vibrate(50);
+						}
 					}
 					self.modifier++;
 					self.modifier >= self.modifiers.length && (self.modifier = 0);
@@ -59,6 +66,7 @@ SliderFragment.prototype.resetContainer = function() {
 			} catch (e) {
 				reportError(e);
 			}
+			downTime = -1;
 		}
 		view.getParent().requestDisallowInterceptTouchEvent(true);
 		return true;
