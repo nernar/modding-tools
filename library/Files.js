@@ -314,12 +314,12 @@ var Files = {
     readUnsafe: /** @type {(pathOrFile: any) => Nullable<string>} */ (function (pathOrFile) {
         var reader = new java.io.FileReader(this.of(pathOrFile));
         reader = new java.io.BufferedReader(reader);
-        var result = reader.readLine();
+        var result = [];
         var line;
         while ((line = reader.readLine()) != null) {
-            result += "\n" + line;
+            result.push(line);
         }
-        return result != null ? "" + result : null;
+        return result.length > 0 ? result.join("\n") : null;
     }),
     read: /** @type {(pathOrFile: any) => Nullable<string>} */ (constructSafe("readUnsafe", "isFile")),
     readLineUnsafe: /** @type {(pathOrFile: any, line: number) => Nullable<string>} */ (function (pathOrFile, line) {
@@ -526,9 +526,12 @@ var Files = {
                 return file.isFile() && filter.apply(this, arguments);
             }, maxDepth, relativePath);
             algorithm = algorithm.digest();
+            var alphabet = "0123456789abcdef";
             var stroke = "";
-            for (var i = 0; i < algorithm.length; i++) {
-                stroke += java.lang.Integer.toHexString(0xFF & algorithm[i]);
+            for (var j, i = 0; i < algorithm.length; i++) {
+                j = algorithm[i] & 0xff;
+                stroke += alphabet.charAt(j >>> 4);
+                stroke += alphabet.charAt(j & 0x0f);
             }
             return stroke;
         };
